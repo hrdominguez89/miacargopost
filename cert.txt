@@ -1,1 +1,0 @@
-ssh -i "cert.pem" admin@ec2-34-229-204-57.compute-1.amazonaws.com
