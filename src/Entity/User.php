@@ -28,10 +28,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'id', nullable: true)]
     private ?Role $role = null;
 
-    #[ORM\ManyToOne(targetEntity: '\App\Entity\Team', inversedBy: 'users')]
-    #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id', nullable: true)]
-    private ?Team $team = null;
-
     #[ORM\Column(name: 'name', type: 'string', length: 100)]
     #[Assert\Length(min: 2, max: 100)]
     #[Assert\NotBlank]
@@ -55,15 +51,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'date_updated', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateUpdated;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: 'App\Entity\Reminder', orphanRemoval: true)]
-    private Collection $reminders;
-
     public function __construct()
     {
         $this->dateCreated = new \DateTime();
         $this->dateUpdated = new \DateTime();
-
-        $this->reminders = new ArrayCollection();
     }
 
 
@@ -201,27 +192,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Team|null
-     */
-    public function getTeam(): ?Team
-    {
-        return $this->team;
-    }
-
-    /**
-     * @param Team|null $team
-     * @return $this
-     */
-    public function setTeam(?Team $team): self
-    {
-        $this->team = $team;
-
-        $team?->addUser($this);
-
-        return $this;
-    }
-
-    /**
      * @return \DateTimeInterface|null
      */
     public function getDateCreated(): ?\DateTimeInterface
@@ -255,43 +225,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateUpdated(?\DateTimeInterface $dateUpdated): self
     {
         $this->dateUpdated = $dateUpdated;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Reminder>
-     */
-    public function getReminders(): Collection
-    {
-        return $this->reminders;
-    }
-
-    /**
-     * @param Reminder $reminder
-     * @return $this
-     */
-    public function addReminder(Reminder $reminder): self
-    {
-        if (!$this->reminders->contains($reminder)) {
-            $this->reminders->add($reminder);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Reminder $reminder
-     * @return $this
-     */
-    public function removeReminder(Reminder $reminder): self
-    {
-        if ($this->reminders->removeElement($reminder)) {
-            // set the owning side to null (unless already changed)
-            if ($reminder->getUser() === $this) {
-                $reminder->setUser(null);
-            }
-        }
 
         return $this;
     }

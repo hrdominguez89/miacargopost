@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Role;
-use App\Entity\Team;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -26,22 +25,6 @@ class UserType extends AbstractType
                 'group_by' => function (?Role $entity) {
 
                     $name = $entity->getRoleKey() ?: '';
-
-                    if (str_contains(strtolower($name), 'admin')) {
-                        return 'ADMINISTRACION';
-                    }
-
-                    return "EMPLEADOS";
-
-                },
-            ])
-            ->add('team', EntityType::class, [
-                'class' => Team::class,
-                'label' => 'Equipo',
-                'attr' => ['class' => 'data-choices data-choices-groups data-choices-search-true'],
-                'group_by' => function (?Team $entity) {
-
-                    $name = $entity->getName() ?: '';
 
                     if (str_contains(strtolower($name), 'admin')) {
                         return 'ADMINISTRACION';

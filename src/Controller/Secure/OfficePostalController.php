@@ -2,6 +2,7 @@
 
 namespace App\Controller\Secure;
 
+use App\Repository\OfficesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,12 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class OfficePostalController extends AbstractController
 {
-    #[Route('/{status}', name: 'app_secure_office_postal')]
-    public function index($status="office"): Response
+    #[Route('/', name: 'app_secure_office_postal')]
+    public function index(OfficesRepository $officesRepository): Response
     {
-        return $this->render('secure/office_postal/index.html.twig', [
-            'controller_name' => 'OfficePostalController',
-            'active' => 'office',
-        ]);
+        $data['offices'] = $officesRepository->findAll();
+        return $this->render('secure/office_postal/index.html.twig', $data);
     }
 }

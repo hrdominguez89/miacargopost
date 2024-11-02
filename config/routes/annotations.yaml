@@ -3,18 +3,6 @@ controllers:
     type: annotation
     prefix: /
 
-public_controllers:
-    resource: ../../src/Controller/Public
-    type: annotation
-    prefix: /public
-    methods: [GET]
-
-api_controllers:
-    resource: ../../src/Controller/API
-    type: annotation
-    prefix: /api
-    methods: [POST]
-
 secure_controllers:
     resource: ../../src/Controller/Secure
     type: annotation

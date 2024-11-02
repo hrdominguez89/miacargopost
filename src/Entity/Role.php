@@ -30,11 +30,6 @@ class Role
     #[Assert\NotBlank]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: '\App\Entity\Permission', inversedBy: 'roles')]
-    #[ORM\JoinTable(name: 'tb_role_permission')]
-    #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'permission_id', referencedColumnName: 'id')]
-    private Collection $permissions;
 
     #[ORM\Column(name: 'date_created', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCreated;
@@ -46,8 +41,6 @@ class Role
     {
         $this->dateCreated = new \DateTime();
         $this->dateUpdated = new \DateTime();
-
-        $this->permissions = new ArrayCollection();
     }
 
     /**
@@ -78,42 +71,6 @@ class Role
         $this->name = strtoupper($name);
 
         $this->roleKey = 'ROLE_'.strtoupper(str_replace(" ", "_", $name));
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Permission>
-     */
-    public function getPermissions(): Collection
-    {
-        return $this->permissions;
-    }
-
-    /**
-     * @param Permission $permission
-     *
-     * @return $this
-     */
-    public function addPermission(Permission $permission): self
-    {
-        if (!$this->permissions->contains($permission)) {
-            $this->permissions->add($permission);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Permission $permission
-     *
-     * @return $this
-     */
-    public function removePermission(Permission $permission): self
-    {
-        if ($this->permissions->removeElement($permission)) {
-            $permission->removeRole($this);
-        }
 
         return $this;
     }
