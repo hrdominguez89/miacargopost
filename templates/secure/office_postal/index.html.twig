@@ -30,10 +30,10 @@
                         <i class="ri-add-line label-icon align-middle fs-16 me-2"></i>
                         Crear oficina postal
                     </a>
-                    <button type="button" id="btn-office-remove-item" class="btn btn-danger btn-label waves-effect waves-light me-1" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                    {# <button type="button" id="btn-office-remove-item" class="btn btn-danger btn-label waves-effect waves-light me-1" data-bs-toggle="tooltip" data-bs-placement="bottom">
                         <i class="ri-delete-bin-line label-icon align-middle fs-16 me-2"></i>
                         Eliminar oficinas postales
-                    </button>
+                    </button> #}
                 </div>
 
             </div>
@@ -43,17 +43,97 @@
                     <ul class="nav nav-tabs nav-custom-light arrow-navtabs nav-tabs-custom nav-primary mb-3" role="tablist">
                                                     <li class="nav-item">
                                 <a class="nav-link active bg-light py-3" href="/es/employee/office-postal/local/index" aria-selected="true">
-                                    <i class="ri-team-line me-1 align-bottom"></i> Oficinas locales
+                                    <i class="ri-team-line me-1 align-bottom"></i> Oficinas
                                 </a>
                             </li>
-                                                    <li class="nav-item">
+                                                    {# <li class="nav-item">
                                 <a class="nav-link  py-3" href="/es/employee/office-postal/others/index" aria-selected="false">
                                     <i class="ri-shield-user-line me-1 align-bottom"></i> Oficinas internacionales
                                 </a>
-                            </li>
+                            </li> #}
                                             </ul>
-                    <form id="form-table-search" method="post">
-                        <div id="datatablepage_wrapper" class="dt-container dt-bootstrap5"><div class="dt-buttons btn-group flex-wrap float-end ms-2" style="display: block;"> <button class="btn btn-secondary buttons-pdf buttons-html5 btn-sm btn-primary btn-label waves-effect waves-light" tabindex="0" aria-controls="datatablepage" type="button"><span>Exportar a PDF</span></button> <div class="btn-group"><button class="btn btn-secondary buttons-collection dropdown-toggle buttons-colvis btn-sm btn-primary btn-label waves-effect waves-light" tabindex="0" aria-controls="datatablepage" type="button" aria-haspopup="dialog"><span>Visibilidad</span></button></div> </div><div class="dt-length"><label for="dt-length-0">Mostrar <select name="datatablepage_length" aria-controls="datatablepage" class="form-select form-select-sm" id="dt-length-0"><option value="100">100</option><option value="500">500</option><option value="1000">1.000</option></select> registros</label></div><div class="dt-search"><label for="dt-search-0">Buscar:</label><input type="search" class="form-control form-control-sm" id="dt-search-0" placeholder="" aria-controls="datatablepage"></div><div class="dt-scroll"><div class="dt-scroll-head" style="overflow: hidden; position: relative; border: 0px; width: 100%;"><div class="dt-scroll-headInner" style="box-sizing: content-box; width: 1272.2px; padding-right: 17px;"><table class="table table-hover table-bordered align-middle dt-responsive nowrap table-striped-columns dataTable" style="margin-left: 0px; width: 1272.2px;"><thead class="table-light text-muted">
+                                            <table id="officeTable" class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Id
+                                                        </th>
+                                                        <th>
+                                                            Codigo
+                                                        </th>
+                                                        <th>
+                                                            Organización
+                                                        </th>
+                                                        <th>
+                                                           Cod full name
+                                                        </th>
+                                                        <th>
+                                                           Org full name
+                                                        </th>
+                                                        <th>
+                                                           Codigo Org
+                                                        </th>
+                                                        <th>
+                                                           Party indentifer
+                                                        </th>
+                                                        <th>
+                                                          Fucntion
+                                                        </th>
+                                                        <th>
+                                                            Editar/Eliminar
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for dataOffice in offices %}  
+                                                
+
+                                                   
+                                                    <tr>
+                                                        <td>
+                                                          {{ dataOffice.id}}
+                                                        </td>
+                                                        <td>
+                                                            {{ dataOffice.impcCode}}
+                                                        </td>
+                                                        <td>
+                                                            {{ dataOffice.OrganisationShortName}}
+                                                        </td>
+                                                        <td>
+                                                            {{ dataOffice.impcCodeFullName}}
+                                                        </td>
+                                                        <td>
+                                                            {{ dataOffice.organisationFullName}}
+                                                        </td>
+                                                        <td>
+                                                            {{ dataOffice.impcOrganisationCode}}
+                                                        </td>
+                                                        <td>
+                                                            {{ dataOffice.partyIdentifier}}
+                                                        </td>
+                                                        <td>
+                                                            {{ dataOffice.function}}
+                                                        </td>
+                                                        <td >
+                                                            <a target="_blank" href="#"
+                                                                class="btn btn-primary"><i class="ri-edit-line"></i></a>
+                                                            <a target="_blank" href="#"
+                                                                class="btn btn-danger"><i class="ri-delete-bin-line label-icon align-middle fs-16 me-2"></i></a>
+                                                        </td>
+                                                    </tr>
+
+                                                    
+                                 {% endfor %}    
+                                
+                                                </tbody>
+                                            </table>
+                   {#  <form id="form-table-search" method="post">
+                        <div id="datatablepage_wrapper" class="dt-container dt-bootstrap5">
+                            <div class="dt-buttons btn-group flex-wrap float-end ms-2" style="display: block;">
+                                 <button class="btn btn-secondary buttons-pdf buttons-html5 btn-sm btn-primary btn-label waves-effect waves-light" tabindex="0" aria-controls="datatablepage" type="button"><span>Exportar a PDF</span></button>
+                                  <div class="btn-group">
+                                    <button class="btn btn-secondary buttons-collection dropdown-toggle buttons-colvis btn-sm btn-primary btn-label waves-effect waves-light" tabindex="0" aria-controls="datatablepage" type="button" aria-haspopup="dialog"><span>Visibilidad</span></button></div>
+                                 </div><div class="dt-length"><label for="dt-length-0">Mostrar <select name="datatablepage_length" aria-controls="datatablepage" class="form-select form-select-sm" id="dt-length-0"><option value="100">100</option><option value="500">500</option><option value="1000">1.000</option></select> registros</label></div><div class="dt-search"><label for="dt-search-0">Buscar:</label><input type="search" class="form-control form-control-sm" id="dt-search-0" placeholder="" aria-controls="datatablepage"></div><div class="dt-scroll"><div class="dt-scroll-head" style="overflow: hidden; position: relative; border: 0px; width: 100%;"><div class="dt-scroll-headInner" style="box-sizing: content-box; width: 1272.2px; padding-right: 17px;"><table class="table table-hover table-bordered align-middle dt-responsive nowrap table-striped-columns dataTable" style="margin-left: 0px; width: 1272.2px;"><thead class="table-light text-muted">
                             <tr role="row"><th data-dt-column="0" class="select-checkbox dt-orderable-none" rowspan="1" colspan="1" aria-label="
                                     
                                         
@@ -2057,7 +2137,7 @@
                         </table></div><div class="dt-scroll-foot" style="overflow: hidden; border: 0px; width: 100%;"><div class="dt-scroll-footInner" style="width: 1272.2px; padding-right: 17px;"><table class="table table-hover table-bordered align-middle dt-responsive nowrap table-striped-columns dataTable" style="margin-left: 0px; width: 1272.2px;"><tfoot>
                             <tr role="row"><th class="select-checkbox" data-dt-column="0" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="1" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="2" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="3" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="4" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th style="text-align: right;" data-dt-column="5" rowspan="1" colspan="1"><span class="dt-column-title">TOTAL ELEMENTOS:</span></th><th id="totalElementsFooter" data-dt-column="6" rowspan="1" colspan="1">163</th><th data-dt-column="7" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="8" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="9" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="10" rowspan="1" colspan="1"><span class="dt-column-title"></span></th></tr>
                             </tfoot><colgroup><col style="width: 35.4px;"><col style="width: 62.3px;"><col style="width: 94.9125px;"><col style="width: 160.188px;"><col style="width: 197.087px;"><col style="width: 194.55px;"><col style="width: 101.975px;"><col style="width: 104.525px;"><col style="width: 93.55px;"><col style="width: 139.5px;"><col style="width: 87.4125px;"></colgroup></table></div></div></div><div class="dt-info" aria-live="polite" id="datatablepage_info" role="status">Mostrando 1 a 100 de 163 registros</div><div class="dt-paging paging_full_numbers" style="margin: 8px 0px;"><ul class="pagination"><li class="dt-paging-button page-item disabled"><a class="page-link first" aria-controls="datatablepage" aria-disabled="true" aria-label="First" data-dt-idx="first" tabindex="-1">Primero</a></li><li class="dt-paging-button page-item disabled"><a class="page-link previous" aria-controls="datatablepage" aria-disabled="true" aria-label="Previous" data-dt-idx="previous" tabindex="-1">Anterior</a></li><li class="dt-paging-button page-item active"><a href="#" class="page-link" aria-controls="datatablepage" aria-current="page" data-dt-idx="0" tabindex="0">1</a></li><li class="dt-paging-button page-item"><a href="#" class="page-link" aria-controls="datatablepage" data-dt-idx="1" tabindex="0">2</a></li><li class="dt-paging-button page-item"><a href="#" class="page-link next" aria-controls="datatablepage" aria-label="Next" data-dt-idx="next" tabindex="0">Siguiente</a></li><li class="dt-paging-button page-item"><a href="#" class="page-link last" aria-controls="datatablepage" aria-label="Last" data-dt-idx="last" tabindex="0">Último</a></li></ul></div></div><!-- end table -->
-                    </form>
+                    </form> #}
                 </div>
             </div><!-- end card body -->
         </div><!-- end card -->
@@ -2072,8 +2152,10 @@
                 <h5 class="modal-title">Crear nueva oficina</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
             </div>
+            
+            {{ form(officesForm) }}
 
-            <form name="office" method="post" action="/es/employee/office-postal/new" class="needs-validation" novalidate="novalidate">
+           {#  <form name="office" method="post" action="/es/employee/office-postal/new" class="needs-validation" novalidate="novalidate">
 
 
 <div class="row">
@@ -2108,7 +2190,7 @@
     </div><!-- end col -->
 </div><!-- end row -->
 
-<input type="hidden" id="office__token" name="office[_token]" value="e54bea4ea1ef2f6f.r_qLR3U3bsSi8cLBa1FiCcQLk1y18S1W7AtpXKu2Exc._on-MTxcCYjvlLKzHzxaa7Bl_GXfmHc1uW0LBN6PUUjbicRyDUA-ndGnpQ"></form>
+<input type="hidden" id="office__token" name="office[_token]" value="e54bea4ea1ef2f6f.r_qLR3U3bsSi8cLBa1FiCcQLk1y18S1W7AtpXKu2Exc._on-MTxcCYjvlLKzHzxaa7Bl_GXfmHc1uW0LBN6PUUjbicRyDUA-ndGnpQ"></form> #}
 
         </div>
     </div>
@@ -2123,6 +2205,22 @@
 {% block javascripts %}
 
 {{ parent() }}
+
+<script>
+    $(document).ready(() => {
+        
+        initDataTable();
+    })
+
+    const initDataTable = () => {
+        let table = new DataTable('#officeTable', {
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.1.5/i18n/es-MX.json',
+            },
+        });
+    }
+
+</script>
 
 <!-- apexcharts -->
 <script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
