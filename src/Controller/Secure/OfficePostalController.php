@@ -2,6 +2,7 @@
 
 namespace App\Controller\Secure;
 
+use App\Entity\Offices;
 use App\Repository\OfficesRepository;
 use App\Form\OfficeType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,9 +24,18 @@ class OfficePostalController extends AbstractController
     #[Route('/add', name: 'app_secure_office_postal_form_add')]
     public function add(Request $request): Response
     {
+        $office = new Offices();
+        $form = $this->createForm(OfficeType::class, $office);
         
-        $form = $this->createForm(OfficeType::class);
+        $form->handleRequest($request);
+        if (  $form->isSubmitted() && $form->isValid()){
+            dd($request);
+            /* $em->persist($office);
+            $em->flush(); */
+        }
+        
         return $this->render('secure/office_postal/add.html.twig',
-        ['officesForm' => $form->createView(),]);
+        ['officeForm' => $form->createView(),]);
+        
     }
 }

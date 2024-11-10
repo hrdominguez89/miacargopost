@@ -1,0 +1,25 @@
+{% extends 'partials/main.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+<!-- jsvectormap css -->
+<link href="{{ asset('libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+
+<!--Swiper slider css-->
+<link href="{{ asset('libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card card-height-100">
+            <div class="card-header align-items-center d-flex">
+                {{form(officeForm)}}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
