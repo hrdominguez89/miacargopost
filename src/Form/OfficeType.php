@@ -32,35 +32,66 @@ class OfficeType extends AbstractType
             ->add('mailFlowInbound')
             ->add('mailFlowOutbound')
             ->add('mailFlowClosedTransit')
-            ->add('categoryAInbound', ChoiceType::class, [
-                'label' => ' ',
-               'choices' => [
-                'Category A Inbound' => 'A',               
-                            
-               ],
+            ->add('categoryAInbound', CheckboxType::class, [
+                'label' => 'Category A Inbound',
                 'required' => false,
-                'expanded' => true,  // Render as checkbox
-                'multiple' => true, // Single checkbox
-                'empty_data' => 'null', // Set to null if unchecked
-                
-               
-               
+            ])           
+            ->add('categoryBInbound', CheckboxType::class, [
+                'label' => 'Category B Inbound',
+                'required' => false,
             ])
-            ->add('categoryBInbound')
-            ->add('categoryCInbound')
-            ->add('categoryDInbound')
-            ->add('CategoryAOutbound')
-            ->add('categoryBOutbound')
-            ->add('categoryCOutbound')
-            ->add('categoryDOutbound')
-            ->add('mailClassUInbound')
-            ->add('mailClassCInbound')
-            ->add('mailClassEInbound')
-            ->add('mailClassTInbound')
-            ->add('mailClassUOutbound')
-            ->add('mailClassCOutbound')
-            ->add('mailClassEOutbound')
-            ->add('mailClassTOutbound')
+            ->add('categoryCInbound', CheckboxType::class, [
+                'label' => 'Category C Inbound',
+                'required' => false,
+            ])
+            ->add('categoryDInbound', CheckboxType::class, [
+                'label' => 'Category D Inbound',
+                'required' => false,
+            ])
+            ->add('categoryAOutbound', CheckboxType::class,[
+                'label'=> 'Category A Outbound',
+                'required'=> false
+            ])
+            ->add('categoryBOutbound', CheckboxType::class,[
+                'label'=> 'Category B Outbound',
+                'required'=> false
+            ])
+            ->add('categoryCOutbound', CheckboxType::class,[
+                'label'=> 'Category C Outbound',
+                'required'=> false
+            ])
+            ->add('categoryDOutbound', CheckboxType::class,[
+                'label'=> 'Category D Outbound',
+                'required'=> false
+            ])
+            ->add('mailClassUInbound', CheckboxType::class,[
+                'label'=> 'Mail Class U Inbound',
+                'required'=> false])
+            ->add('mailClassCInbound', CheckboxType::class,[
+                'label'=> 'Mail Class C Inbound',
+                'required'=> false])
+            ->add('mailClassEInbound', CheckboxType::class,[
+                'label'=> 'Mail Class E Inbound',
+                'required'=> false])
+            ->add('mailClassTInbound', CheckboxType::class,[
+                'label'=> 'Mail Class T Inbound',
+                'required'=> false])
+            ->add('mailClassUOutbound', CheckboxType::class,[
+                'label'=> 'Mail class U Outbound',
+                'required'=> false
+            ])
+            ->add('mailClassCOutbound', CheckboxType::class,[
+                'label'=> 'Mail class C Outbound',
+                'required'=> false
+            ])
+            ->add('mailClassEOutbound', CheckboxType::class,[
+                'label'=> 'Mail class E Outbound',
+                'required'=> false
+            ])
+            ->add('mailClassTOutbound', CheckboxType::class,[
+                'label'=> 'Mail class T Outbound',
+                'required'=> false
+            ])
             ->add('specialType')
             ->add('bilateralAgreement')
             ->add('specialRestrictions')
