@@ -200,8 +200,11 @@
                                     {{ dataOffice.specialRestrictions}}
                                 </td>
                                 <td>
-                                    <a target="_blank" href="#" class="btn btn-primary"><i class="ri-edit-line"></i></a>
-                                    <a target="_blank" href="#" class="btn btn-danger"><i
+                                    <a  href=" {{ path('app_secure_office_postal_form_edit', {id: dataOffice.id })}} " class="btn btn-primary"><i class="ri-edit-line"></i></a>
+                                    <a  href="javascript:void(0)" class="btn btn-danger"
+                                    onclick="confirmarSweet('Esta seguro de borrar la oficina',
+                                    '{{ path('app_secure_office_postal_form_delete' , {id: dataOffice.id })}}')"
+                                    ><i
                                             class="ri-delete-bin-line label-icon align-middle fs-16 me-2"></i></a>
                                 </td>
                             </tr>

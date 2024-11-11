@@ -29,9 +29,18 @@ class OfficeType extends AbstractType
         ['widget' => 'single_text', ])
             ->add('validTo', DateType::class,
             ['widget' => 'single_text', ])
-            ->add('mailFlowInbound')
-            ->add('mailFlowOutbound')
-            ->add('mailFlowClosedTransit')
+            ->add('mailFlowInbound', CheckboxType::class, [
+                'label' => 'Mail Flow Inbound',
+                'required' => false,
+            ])
+            ->add('mailFlowOutbound', CheckboxType::class, [
+                'label' => 'Mail Flow Outbound',
+                'required' => false,
+            ])
+            ->add('mailFlowClosedTransit', CheckboxType::class, [
+                'label' => 'Mail Flow Closed Transit',
+                'required' => false,
+            ])
             ->add('categoryAInbound', CheckboxType::class, [
                 'label' => 'Category A Inbound',
                 'required' => false,
@@ -95,7 +104,7 @@ class OfficeType extends AbstractType
             ->add('specialType')
             ->add('bilateralAgreement')
             ->add('specialRestrictions')
-            ->add('Crear', SubmitType::class)
+            ->add('Guardar', SubmitType::class)
         ;
     }
 

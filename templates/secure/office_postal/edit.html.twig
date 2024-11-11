@@ -14,13 +14,6 @@
 
 {% block content %}
 <div class="container-fluid">
-    {% for flash_message in app.flashes('success') %}
-    <div class="alert alert-success alert-label-icon alert-dismissible fade show" role="alert">
-        <i class="ri-error-warning-line label-icon"></i>
-        {{ flash_message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endfor %}
     <div class="col-xl-12 col-lg-12">
         <div class="card card-height-100">
             <div class="card-header align-items-center d-flex">
