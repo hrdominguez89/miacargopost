@@ -110,6 +110,9 @@ class Offices
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialRestrictions = null;
 
+    #[ORM\Column]
+    private ?bool $isLocal = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -495,6 +498,18 @@ class Offices
     public function setSpecialRestrictions(?string $specialRestrictions): static
     {
         $this->specialRestrictions = $specialRestrictions;
+
+        return $this;
+    }
+
+    public function isIsLocal(): ?bool
+    {
+        return $this->isLocal;
+    }
+
+    public function setIsLocal(bool $isLocal): static
+    {
+        $this->isLocal = $isLocal;
 
         return $this;
     }

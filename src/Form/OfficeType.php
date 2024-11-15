@@ -104,6 +104,10 @@ class OfficeType extends AbstractType
             ->add('specialType')
             ->add('bilateralAgreement')
             ->add('specialRestrictions')
+            ->add('isLocal', CheckboxType::class,[
+                'label'=> 'Is Local',
+                'required'=> false
+            ])
             ->add('Guardar', SubmitType::class)
         ;
     }

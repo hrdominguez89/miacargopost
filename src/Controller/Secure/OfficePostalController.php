@@ -24,6 +24,13 @@ class OfficePostalController extends AbstractController
         $data['offices'] = $officesRepository->findAll();
         return $this->render('secure/office_postal/index.html.twig', $data);
     }
+    #[Route('/local', name: 'app_secure_office_postal_local')]
+    public function indexLocal(OfficesRepository $officesRepository): Response
+    {
+        
+        $data['offices'] = $officesRepository->findAll();
+        return $this->render('secure/office_postal/indexLocal.html.twig', $data);
+    }
     #[Route('/add', name: 'app_secure_office_postal_form_add')]
     public function add(Request $request): Response
     {
@@ -129,6 +136,7 @@ class OfficePostalController extends AbstractController
         $form->get('specialType')->setData($office->getSpecialType()); 
         $form->get('bilateralAgreement')->setData($office->getBilateralAgreement()); 
         $form->get('specialRestrictions')->setData($office->getSpecialRestrictions()); 
+        $form->get('isLocal')->setData($office->isIsLocal()); 
 
 
 
@@ -175,6 +183,7 @@ class OfficePostalController extends AbstractController
             $office->setSpecialType($form->get('specialType')->getData());
             $office->setBilateralAgreement($form->get('bilateralAgreement')->getData());
             $office->setSpecialRestrictions($form->get('specialRestrictions')->getData());
+            $office->setIsLocal($form->get('isLocal')->getData());
 
             
             
