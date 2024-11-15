@@ -5,6 +5,12 @@ namespace App\Entity;
 use App\Repository\OfficesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+
 
 #[ORM\Entity(repositoryClass: OfficesRepository::class)]
 class Offices
@@ -513,4 +519,18 @@ class Offices
 
         return $this;
     }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata){
+        $metadata->addPropertyConstraint('impcCode', new Assert\NotBlank(
+            ['message' => 'Por favor ingrese un impc Code' ]));
+
+        $metadata->addConstraint(new UniqueEntity([
+                'fields' => 'impcCode',
+                'message' => 'Valida impc Code ingresado ya que es unico',
+                
+            ]));
+    }
+
+
+    
 }

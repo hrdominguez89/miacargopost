@@ -72,6 +72,7 @@ class OfficePostalController extends AbstractController
             $this->em->persist($office);
             $this->em->flush();
 
+            flash()->success('Oficina creada con exito');
             $this->addFlash('success', 'Oficina creada con éxito');
 
             return $this->redirectToRoute('app_secure_office_postal');
@@ -190,6 +191,7 @@ class OfficePostalController extends AbstractController
             try{
 
                 $this->em->flush();
+                flash()->success('Oficina Editada con exito');
                 $this->addFlash('success', 'Oficina Modificada con éxito');
                 return $this->redirectToRoute('app_secure_office_postal');
 
@@ -219,6 +221,7 @@ class OfficePostalController extends AbstractController
         }
         $this->em->remove($office);
         $this->em->flush();
+        flash()->success('Oficina Eliminada con exito');
         $this->addFlash('success', 'Oficina Borrada con éxito');
         return $this->redirectToRoute('app_secure_office_postal');
     }
