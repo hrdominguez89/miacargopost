@@ -526,7 +526,7 @@ class Offices
 
         $metadata->addConstraint(new UniqueEntity([
                 'fields' => 'impcCode',
-                'message' => 'Valida impc Code ingresado ya que es unico',
+                'message' => 'Valida impc Code ingresado ya que es único',
                 
             ]));
     }
