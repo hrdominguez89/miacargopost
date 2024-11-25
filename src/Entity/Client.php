@@ -20,6 +20,9 @@ class Client
 
     #[ORM\Column(length: 50)]
     private ?string $typeDocument = null;
+    
+    #[ORM\Column(length: 50)]
+    private ?string $document = null;
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -27,8 +30,10 @@ class Client
     #[ORM\Column(length: 15)]
     private ?string $telephone = null;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Address::class)]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Address::class, cascade: ['persist'])]
     private Collection $clientAddress;
+
+   
 
     public function __construct()
     {
@@ -114,6 +119,18 @@ class Client
                 $clientAddress->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDocument(): ?string
+    {
+        return $this->document;
+    }
+
+    public function setDocument(string $document): static
+    {
+        $this->document = $document;
 
         return $this;
     }

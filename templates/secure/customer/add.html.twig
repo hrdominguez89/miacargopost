@@ -15,164 +15,60 @@
 {% block content %}
 
 <div class="container-fluid">
-                    
     <div class="row">
-    <div class="col-lg-12">
-        <div class="card" id="customerList">
-            <div class="card-header align-items-center d-flex">
-
-                <h4 class="card-title mb-0 flex-grow-1 text-uppercase">
-                    Listado de clientes </span>
-                </h4>
-
-                <div id="btn-datatable-dt-buttons" class="float-end">
-                    <a href="{{ path('app_secure_customer_add') }}"  class="btn btn-primary btn-label waves-effect waves-light me-1">
-                        <i class="ri-add-line label-icon align-middle fs-16 me-2"></i>
-                        Crear cliente
-                    </a>
-                    {# <button type="button" id="btn-customer-remove-item" class="btn btn-danger btn-label waves-effect waves-light me-1" data-bs-toggle="tooltip" data-bs-placement="bottom">
-                        <i class="ri-delete-bin-line label-icon align-middle fs-16 me-2"></i>
-                        Eliminar clientes
-                    </button> #}
+        <div class="col-lg-12">
+            <div class="card" id="customerList">
+    
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1 text-uppercase">
+                        Agregar Cliente
+                    </h4>
                 </div>
+    
+                <div class="card-body " >
+                    {{ form_start (clientForm, {attr: { 'data-turbo': 'false' } }) }}
 
-            </div>
-            <div class="card-body">
-                {# <form id="form-table-search" method="post">
-                    <div id="datatablepage_wrapper" class="dt-container dt-bootstrap5"><div class="dt-buttons btn-group flex-wrap float-end ms-2" style="display: block;"> <button class="btn btn-secondary buttons-pdf buttons-html5 btn-sm btn-primary btn-label waves-effect waves-light" tabindex="0" aria-controls="datatablepage" type="button"><span>Exportar a PDF</span></button> <div class="btn-group"><button class="btn btn-secondary buttons-collection dropdown-toggle buttons-colvis btn-sm btn-primary btn-label waves-effect waves-light" tabindex="0" aria-controls="datatablepage" type="button" aria-haspopup="dialog"><span>Visibilidad</span></button></div> </div><div class="dt-length"><label for="dt-length-0">Mostrar <select name="datatablepage_length" aria-controls="datatablepage" class="form-select form-select-sm" id="dt-length-0"><option value="100">100</option><option value="500">500</option><option value="1000">1.000</option></select> registros</label></div><div class="dt-search"><label for="dt-search-0">Buscar:</label><input type="search" class="form-control form-control-sm" id="dt-search-0" placeholder="" aria-controls="datatablepage"></div><div class="dt-scroll"><div class="dt-scroll-head" style="overflow: hidden; position: relative; border: 0px; width: 100%;"><div class="dt-scroll-headInner" style="box-sizing: content-box; width: 1289.2px; padding-right: 0px;"><table class="table table-hover table-bordered align-middle dt-responsive nowrap table-striped-columns dataTable" style="margin-left: 0px; width: 1289.2px;"><thead class="table-light text-muted">
-                        <tr role="row"><th data-dt-column="0" class="select-checkbox dt-orderable-none" rowspan="1" colspan="1" aria-label="
-                                
-                                    
-                                
-                            "><span class="dt-column-title"></span><span class="dt-column-order"></span></th><th class="sort dt-orderable-asc dt-orderable-desc dt-ordering-desc" data-sort="id" data-dt-column="1" rowspan="1" colspan="1" aria-sort="descending" aria-label="ID: Activate to remove sorting" tabindex="0"><span class="dt-column-title" role="button">ID</span><span class="dt-column-order"></span></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="name" data-dt-column="2" rowspan="1" colspan="1" aria-label="NOMBRE: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">NOMBRE</span><span class="dt-column-order"></span></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="customerCode" data-dt-column="3" rowspan="1" colspan="1" aria-label="CASILLERO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">CASILLERO</span><span class="dt-column-order"></span></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="email" data-dt-column="4" rowspan="1" colspan="1" aria-label="CORREO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">CORREO</span><span class="dt-column-order"></span></th><th data-sort="officePostalName" data-dt-column="5" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="OFICINA: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">OFICINA</span><span class="dt-column-order"></span></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="enabled" data-dt-column="6" rowspan="1" colspan="1" aria-label="ESTADO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">ESTADO</span><span class="dt-column-order"></span></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="dateCreated" data-dt-column="7" rowspan="1" colspan="1" aria-label="CREADO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">CREADO</span><span class="dt-column-order"></span></th><th data-dt-column="8" rowspan="1" colspan="1" class="dt-orderable-none" aria-label="
-                                
-                                    
-                                        
-                                    
-                                
-                            "><span class="dt-column-title"></span><span class="dt-column-order"></span></th></tr>
-                        <tr id="btn-datatable-filter" style="" role="row"><th data-dt-column="0" class="select-checkbox dt-orderable-none" rowspan="1" colspan="1" aria-label="
-                                
-                                    
-                                
-                            "><span class="dt-column-title">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" id="checkAll">
-                                </div>
-                            </span><span class="dt-column-order"></span></th><th data-dt-column="1" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc dt-ordering-desc" aria-sort="descending" aria-label="ID: Activate to remove sorting" tabindex="0"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm" id="id">
-                            </span><span class="dt-column-order"></span></th><th data-dt-column="2" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="NOMBRE: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm" id="name">
-                            </span><span class="dt-column-order"></span></th><th data-dt-column="3" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="CASILLERO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm" id="customerCode">
-                            </span><span class="dt-column-order"></span></th><th data-dt-column="4" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="CORREO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm" id="email"></span><span class="dt-column-order"></span></th><th data-dt-column="5" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="OFICINA: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm" id="officePostalName">
-                            </span><span class="dt-column-order"></span></th><th data-dt-column="6" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="ESTADO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm" placeholder="1 o 0" id="enabled">
-                            </span><span class="dt-column-order"></span></th><th data-dt-column="7" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="CREADO: Activate to sort" tabindex="0"><span class="dt-column-title" role="button">
-                                <input type="text" class="form-control form-control-sm flatpickr-input" id="dateCreated" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" readonly="readonly">
-                            </span><span class="dt-column-order"></span></th><th data-dt-column="8" rowspan="1" colspan="1" class="dt-orderable-none" aria-label="
-                                
-                                    
-                                        
-                                    
-                                
-                            "><span class="dt-column-title">
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-sm btn-primary waves-effect waves-light">
-                                        <i class="ri-search-2-line label-icon align-middle fs-16"></i>
-                                    </button>
-                                </div>
-                            </span><span class="dt-column-order"></span></th></tr>
-                        </thead><colgroup><col style="width: 35.4px;"><col style="width: 160.425px;"><col style="width: 171.387px;"><col style="width: 175.8px;"><col style="width: 184.938px;"><col style="width: 171.363px;"><col style="width: 169.9px;"><col style="width: 170.65px;"><col style="width: 49.3375px;"></colgroup></table></div></div><div class="dt-scroll-body" style="position: relative; overflow: auto; max-height: 400px; height: 400px;"><div id="datatablepage_processing" class="dt-processing card" role="status" style="display: none;">Procesando...<div><div></div><div></div><div></div><div></div></div></div><table class="table table-hover table-bordered align-middle dt-responsive nowrap table-striped-columns dataTable" id="datatablepage" aria-describedby="datatablepage_info" style="width: 1289.2px;"><colgroup><col style="width: 35.4px;"><col style="width: 160.425px;"><col style="width: 171.387px;"><col style="width: 175.8px;"><col style="width: 184.938px;"><col style="width: 171.363px;"><col style="width: 169.9px;"><col style="width: 170.65px;"><col style="width: 49.3375px;"></colgroup><tfoot>
-                        <tr role="row"><th class="select-checkbox" data-dt-column="0" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title"></span></div></th><th data-dt-column="1" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title"></span></div></th><th data-dt-column="2" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title"></span></div></th><th data-dt-column="3" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title"></span></div></th><th style="text-align: right;" data-dt-column="4" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title">TOTAL ELEMENTOS:</span></div></th><th data-dt-column="5" rowspan="1" colspan="1"><div class="dt-scroll-sizing">0</div></th><th data-dt-column="6" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title"></span></div></th><th data-dt-column="7" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title"></span></div></th><th data-dt-column="8" rowspan="1" colspan="1"><div class="dt-scroll-sizing"><span class="dt-column-title"></span></div></th></tr>
-                        </tfoot><thead class="table-light text-muted">
-                        <tr role="row"><th data-dt-column="0" class="select-checkbox dt-orderable-none" rowspan="1" colspan="1" aria-label="
-                                
-                                    
-                                
-                            "><div class="dt-scroll-sizing"><span class="dt-column-title"></span><span class="dt-column-order"></span></div></th><th class="sort dt-orderable-asc dt-orderable-desc dt-ordering-desc" data-sort="id" data-dt-column="1" rowspan="1" colspan="1" aria-sort="descending" aria-label="ID: Activate to remove sorting"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">ID</span><span class="dt-column-order"></span></div></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="name" data-dt-column="2" rowspan="1" colspan="1" aria-label="NOMBRE: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">NOMBRE</span><span class="dt-column-order"></span></div></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="customerCode" data-dt-column="3" rowspan="1" colspan="1" aria-label="CASILLERO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">CASILLERO</span><span class="dt-column-order"></span></div></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="email" data-dt-column="4" rowspan="1" colspan="1" aria-label="CORREO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">CORREO</span><span class="dt-column-order"></span></div></th><th data-sort="officePostalName" data-dt-column="5" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="OFICINA: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">OFICINA</span><span class="dt-column-order"></span></div></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="enabled" data-dt-column="6" rowspan="1" colspan="1" aria-label="ESTADO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">ESTADO</span><span class="dt-column-order"></span></div></th><th class="sort dt-orderable-asc dt-orderable-desc" data-sort="dateCreated" data-dt-column="7" rowspan="1" colspan="1" aria-label="CREADO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">CREADO</span><span class="dt-column-order"></span></div></th><th data-dt-column="8" rowspan="1" colspan="1" class="dt-orderable-none" aria-label="
-                                
-                                    
-                                        
-                                    
-                                
-                            "><div class="dt-scroll-sizing"><span class="dt-column-title"></span><span class="dt-column-order"></span></div></th></tr>
-                        <tr style="" role="row"><th data-dt-column="0" class="select-checkbox dt-orderable-none" rowspan="1" colspan="1" aria-label="
-                                
-                                    
-                                
-                            "><div class="dt-scroll-sizing"><span class="dt-column-title">
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </span><span class="dt-column-order"></span></div></th><th data-dt-column="1" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc dt-ordering-desc" aria-sort="descending" aria-label="ID: Activate to remove sorting"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm">
-                            </span><span class="dt-column-order"></span></div></th><th data-dt-column="2" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="NOMBRE: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm">
-                            </span><span class="dt-column-order"></span></div></th><th data-dt-column="3" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="CASILLERO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm">
-                            </span><span class="dt-column-order"></span></div></th><th data-dt-column="4" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="CORREO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm"></span><span class="dt-column-order"></span></div></th><th data-dt-column="5" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="OFICINA: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm">
-                            </span><span class="dt-column-order"></span></div></th><th data-dt-column="6" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="ESTADO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">
-                                <input type="text" autocomplete="off" class="form-control form-control-sm" placeholder="1 o 0">
-                            </span><span class="dt-column-order"></span></div></th><th data-dt-column="7" rowspan="1" colspan="1" class="dt-orderable-asc dt-orderable-desc" aria-label="CREADO: Activate to sort"><div class="dt-scroll-sizing"><span class="dt-column-title" role="button">
-                                <input type="text" class="form-control form-control-sm flatpickr-input" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" readonly="readonly">
-                            </span><span class="dt-column-order"></span></div></th><th data-dt-column="8" rowspan="1" colspan="1" class="dt-orderable-none" aria-label="
-                                
-                                    
-                                        
-                                    
-                                
-                            "><div class="dt-scroll-sizing"><span class="dt-column-title">
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-sm btn-primary waves-effect waves-light">
-                                        <i class="ri-search-2-line label-icon align-middle fs-16"></i>
-                                    </button>
-                                </div>
-                            </span><span class="dt-column-order"></span></div></th></tr>
-                        </thead>
-                        <tbody><tr><td colspan="9" class="dt-empty">Ningún dato disponible en esta tabla</td></tr></tbody>
-                        
-                    </table></div><div class="dt-scroll-foot" style="overflow: hidden; border: 0px; width: 100%;"><div class="dt-scroll-footInner" style="width: 1289.2px; padding-right: 0px;"><table class="table table-hover table-bordered align-middle dt-responsive nowrap table-striped-columns dataTable" style="margin-left: 0px; width: 1289.2px;"><tfoot>
-                        <tr role="row"><th class="select-checkbox" data-dt-column="0" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="1" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="2" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="3" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th style="text-align: right;" data-dt-column="4" rowspan="1" colspan="1"><span class="dt-column-title">TOTAL ELEMENTOS:</span></th><th id="totalElementsFooter" data-dt-column="5" rowspan="1" colspan="1">0</th><th data-dt-column="6" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="7" rowspan="1" colspan="1"><span class="dt-column-title"></span></th><th data-dt-column="8" rowspan="1" colspan="1"><span class="dt-column-title"></span></th></tr>
-                        </tfoot><colgroup><col style="width: 35.4px;"><col style="width: 160.425px;"><col style="width: 171.387px;"><col style="width: 175.8px;"><col style="width: 184.938px;"><col style="width: 171.363px;"><col style="width: 169.9px;"><col style="width: 170.65px;"><col style="width: 49.3375px;"></colgroup></table></div></div></div><div class="dt-info" aria-live="polite" id="datatablepage_info" role="status">Mostrando registros del 0 al 0 de un total de 0 registros</div><div class="dt-paging paging_full_numbers" style="margin: 8px 0px;"><ul class="pagination"><li class="dt-paging-button page-item disabled"><a class="page-link first" aria-controls="datatablepage" aria-disabled="true" aria-label="First" data-dt-idx="first" tabindex="-1">Primero</a></li><li class="dt-paging-button page-item disabled"><a class="page-link previous" aria-controls="datatablepage" aria-disabled="true" aria-label="Previous" data-dt-idx="previous" tabindex="-1">Anterior</a></li><li class="dt-paging-button page-item disabled"><a class="page-link next" aria-controls="datatablepage" aria-disabled="true" aria-label="Next" data-dt-idx="next" tabindex="-1">Siguiente</a></li><li class="dt-paging-button page-item disabled"><a class="page-link last" aria-controls="datatablepage" aria-disabled="true" aria-label="Last" data-dt-idx="last" tabindex="-1">Último</a></li></ul></div></div>
-                </form> #}
-                <table id="officeTable" class="table table-striped mt-2" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Tipo Documento</th>
-                            <th>Documento</th>
-                            <th>Email</th>
-                            <th>Teléfono</th>
-                            <th>Dirección</th>
-                            <th>Editar/Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>John Doe</td>
-                            <td>Cédula de Identidad</td>
-                            <td>1234567890</td>
-                            <td>johndoe@example.com</td>
-                            <td>1234567890</td>
-                            <td>Calle 123, Colonia 456, Ciudad 789</td>
-                            <td>
-                                <a href="#" class="btn btn-primary btn-sm">Editar</a>
-                                <a href="#" class="btn btn-danger btn-sm">Eliminar</a>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <div>
+                        {{ form_row (clientForm.name) }}
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6">
+                            {{ form_row (clientForm.typeDocument) }}
+                        </div>
+                        <div class="col-xl-6">
+                            {{ form_row (clientForm.document) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6">
+                            {{ form_row (clientForm.email) }}
+                        </div>
+                        <div class="col-xl-6">
+                            {{ form_row (clientForm.telephone) }}
+                        </div>
+                    </div>
+                   
+                    <div>
+                        {{ form_row (clientForm.country) }}
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6">
+                            {{ form_row (clientForm.province) }}
+                        </div>
+                        <div class="col-xl-6">
+                            {{ form_row (clientForm.state) }}
+                        </div>
+                    </div>
+                    <div>
+                        {{ form_row (clientForm.postalCode) }}
+                    </div>
 
-                </table>
+
+                    {{ form_end(clientForm)}}
+                </div>
             </div>
         </div>
-
     </div>
-    <!--end col-->
 </div>
 
     <!-- Modal -->
