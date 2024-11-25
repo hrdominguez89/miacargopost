@@ -32,6 +32,9 @@ class Address
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $additionalInformation = null;
 
+    #[ORM\ManyToOne(inversedBy: 'clientAddress')]
+    private ?Client $client = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class Address
     public function setAdditionalInformation(?string $additionalInformation): static
     {
         $this->additionalInformation = $additionalInformation;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }
