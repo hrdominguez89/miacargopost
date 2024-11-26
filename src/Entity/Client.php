@@ -31,13 +31,13 @@ class Client
     private ?string $telephone = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Address::class, cascade: ['persist'])]
-    private Collection $clientAddress;
+    private Collection $clientAddresses;
 
    
 
     public function __construct()
     {
-        $this->clientAddress = new ArrayCollection();
+        $this->clientAddresses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,15 +96,15 @@ class Client
     /**
      * @return Collection<int, Address>
      */
-    public function getClientAddress(): Collection
+    public function getClientAddresses(): Collection
     {
-        return $this->clientAddress;
+        return $this->clientAddresses;
     }
 
     public function addClientAddress(Address $clientAddress): static
     {
-        if (!$this->clientAddress->contains($clientAddress)) {
-            $this->clientAddress->add($clientAddress);
+        if (!$this->clientAddresses->contains($clientAddress)) {
+            $this->clientAddresses->add($clientAddress);
             $clientAddress->setClient($this);
         }
 
@@ -113,7 +113,7 @@ class Client
 
     public function removeClientAddress(Address $clientAddress): static
     {
-        if ($this->clientAddress->removeElement($clientAddress)) {
+        if ($this->clientAddresses->removeElement($clientAddress)) {
             // set the owning side to null (unless already changed)
             if ($clientAddress->getClient() === $this) {
                 $clientAddress->setClient(null);

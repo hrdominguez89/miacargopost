@@ -47,8 +47,17 @@
                             {{ form_row (clientForm.telephone) }}
                         </div>
                     </div>
+                    <div data-prototype="{{ form_widget (clientForm.clientAddresses.vars.prototype)|e('html_attr') }}">
+                        {% for clientAddress in clientForm.clientAddresses %}
+                        {# Los elementos iniciales de la colección se renderizan automáticamente aquí #}
+                        {{ form_label (clientAddress.country) }}
+                        {{ form_widget(clientAddress.country) }}
+                    {{ form_errors(clientAddress.country) }}
+                        
+                        {% endfor %}
+                    </div>
                    
-                    <div>
+                    {# <div>
                         {{ form_row (clientForm.country) }}
                     </div>
                     <div class="row">
@@ -61,7 +70,7 @@
                     </div>
                     <div>
                         {{ form_row (clientForm.postalCode) }}
-                    </div>
+                    </div> #}
 
 
                     {{ form_end(clientForm)}}

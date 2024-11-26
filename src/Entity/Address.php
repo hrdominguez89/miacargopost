@@ -32,7 +32,7 @@ class Address
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $additionalInformation = null;
 
-    #[ORM\ManyToOne(inversedBy: 'clientAddress')]
+    #[ORM\ManyToOne(inversedBy: 'clientAddresses')]
     private ?Client $client = null;
 
     public function getId(): ?int

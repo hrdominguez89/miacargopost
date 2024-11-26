@@ -17,13 +17,14 @@ use App\Entity\Address;
 
 class CustomerController extends AbstractController
 {
-    /** @required */ 
+    /** @required */
     public EntityManagerInterface $em;
     #[Route('/', name: 'app_secure_customer')]
     public function index(ClientRepository $clientRepository, AddressRepository $addressRepository): Response
     {
         $data['clients'] = $clientRepository->findAll();
-        return $this->render('secure/customer/index.html.twig', 
+        return $this->render(
+            'secure/customer/index.html.twig',
             $data
         );
     }
@@ -31,23 +32,29 @@ class CustomerController extends AbstractController
     #[Route('/add', name: 'app_secure_customer_add')]
     public function add(Request $request): Response
     {
-        $form = $this->createForm(ClientType::class);
-        
+        $address = new Address();
+        $client = new Client();
+        $client->addClientAddress($address);
+        $form = $this->createForm(ClientType::class, $client);
+
         $form->handleRequest($request);
 
-        if (  $form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $client = $form->getData();
-            $address = new Address();
+            foreach ($client->getClientAddresses() as $clientAddress) {
+                $this->em->persist($clientAddress);
+            }
+            /* $address = new Address();
             $address->setCountry($form->get('country')->getData());
             $address->setProvince($form->get('province')->getData());
             $address->setState($form->get('state')->getData());
             $address->setAddress($form->get('address')->getData());
             $address->setZipCode($form->get('postalCode')->getData());
-            $address->setAdditionalInformation($form->get('aditionalInformation')->getData());
-            
-            $client->addClientAddress($address);
-           
-            $this->em->persist($client); 
+            $address->setAdditionalInformation($form->get('aditionalInformation')->getData()); */
+
+            /* $client->addClientAddress($address);  */
+
+            $this->em->persist($client);
 
             $this->em->flush();
 
@@ -55,8 +62,9 @@ class CustomerController extends AbstractController
 
             return $this->redirectToRoute('app_secure_customer');
         }
-        return $this->render('secure/customer/add.html.twig', 
-        ['clientForm' => $form->createView(),]
+        return $this->render(
+            'secure/customer/add.html.twig',
+            ['clientForm' => $form->createView(),]
         );
     }
 }
