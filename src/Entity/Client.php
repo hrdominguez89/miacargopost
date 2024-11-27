@@ -30,7 +30,7 @@ class Client
     #[ORM\Column(length: 15)]
     private ?string $telephone = null;
 
-    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Address::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'client', targetEntity: Address::class, cascade: ['persist','remove'])]
     private Collection $clientAddresses;
 
    

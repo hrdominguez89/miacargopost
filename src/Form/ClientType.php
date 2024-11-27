@@ -29,7 +29,8 @@ class ClientType extends AbstractType
                 'allow_add' => true, 
                 'allow_delete' => true, // Permitir eliminar pedidos
                 'by_reference' => false, // Es importante para que los pedidos se gestionen correctamente
-                'label' => 'Direccion'
+                'label' => ' ',
+                'prototype' => true
             ])
             
             ->add('Guardar', SubmitType::class)
