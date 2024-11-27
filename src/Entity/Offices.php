@@ -7,13 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+
 
 #[ORM\Entity(repositoryClass: OfficesRepository::class)]
 class Offices
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 6)]
@@ -111,6 +117,9 @@ class Offices
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialRestrictions = null;
+
+    #[ORM\Column]
+    private ?bool $isLocal = false;
 
     #[ORM\OneToMany(mappedBy: 'originOffice', targetEntity: Routes::class)]
     private Collection $originOfficeRoutes;
@@ -512,6 +521,32 @@ class Offices
 
         return $this;
     }
+
+    public function isIsLocal(): ?bool
+    {
+        return $this->isLocal;
+    }
+
+    public function setIsLocal(bool $isLocal): static
+    {
+        $this->isLocal = $isLocal;
+
+        return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata){
+        $metadata->addPropertyConstraint('impcCode', new Assert\NotBlank(
+            ['message' => 'Por favor ingrese un impc Code' ]));
+
+        $metadata->addConstraint(new UniqueEntity([
+                'fields' => 'impcCode',
+                'message' => 'Valida impc Code ingresado ya que es único',
+                
+            ]));
+    }
+
+
+    
 
     /**
      * @return Collection<int, Routes>

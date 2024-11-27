@@ -42,14 +42,14 @@
                         <ul class="nav nav-tabs nav-custom-light arrow-navtabs nav-tabs-custom nav-primary mb-3"
                             role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link  py-3" href="{{ path('app_secure_office_postal_local') }}"
-                                    aria-selected="false">
+                                <a class="nav-link  active py-3" href="{{ path('app_secure_office_postal_local') }}"
+                                    aria-selected="true">
                                     <i class="ri-shield-user-line me-1 align-bottom"></i> Oficinas locales
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active bg-light py-3" href="/es/employee/office-postal/local/index"
-                                    aria-selected="true">
+                                <a class="nav-link  bg-light py-3" href="{{ path('app_secure_office_postal') }}"
+                                    aria-selected="false">
                                     <i class="ri-team-line me-1 align-bottom"></i> Oficinas internacionales
                                 </a>
                             </li>
@@ -99,8 +99,8 @@
                         </thead>
                         <tbody>
                             {% for dataOffice in offices %}
-
-                            {% if not dataOffice.isLocal %}
+                          
+                            {% if dataOffice.isLocal %}
                             
 
                             <tr>
@@ -202,11 +202,9 @@
                                     {{ dataOffice.specialRestrictions}}
                                 </td>
                                 <td>
-                                    {% if not dataOffice.isLocal %}
-                                    No
-                                    {% endif %}
-                                    
-                                   
+                                    {% if dataOffice.isLocal %}
+                                    Si
+                                    {% endif %}     
                                 </td>
                                 <td>
                                     <a  href=" {{ path('app_secure_office_postal_form_edit', {id: dataOffice.id })}} " class="btn btn-primary"><i class="ri-edit-line"></i></a>
@@ -217,6 +215,8 @@
                                             class="ri-delete-bin-line label-icon align-middle fs-16 me-2"></i></a>
                                 </td>
                             </tr>
+                            
+                            
                             {% endif %}
 
                             {% endfor %}
