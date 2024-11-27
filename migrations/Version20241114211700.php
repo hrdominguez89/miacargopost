@@ -20,11 +20,12 @@ final class Version20241114211700 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE office_id_seq CASCADE');        
-        $this->addSql('ALTER TABLE offices ADD is_local BOOLEAN NOT NULL');
+        // $this->addSql('DROP SEQUENCE office_id_seq CASCADE');        
+        $this->addSql('ALTER TABLE offices ADD is_local BOOLEAN');
         $this->addSql('ALTER TABLE offices ALTER id DROP DEFAULT');
         $this->addSql('UPDATE offices SET is_local =false');
         $this->addSql("UPDATE offices SET is_local =true WHERE impc_organisation_code = 'ARA'");
+        $this->addSql('ALTER TABLE offices ALTER is_local SET NOT NULL');
 
     }
 
