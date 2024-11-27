@@ -32,3 +32,9 @@ services:
     App\Service\FileUploaderService:
         arguments:
             $targetDirectory: '%voucher_directory%'
+
+    App\Validator\Constraints\DifferentAirportsValidator:
+        tags: ['validator.constraint_validator']
+
+    App\Validator\Constraints\UniqueFlightValidator:
+        tags: ['validator.constraint_validator']

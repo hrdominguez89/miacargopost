@@ -3,10 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\FlightsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Validator\Constraints as AppAssert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FlightsRepository::class)]
+#[AppAssert\DifferentAirports]
+#[AppAssert\UniqueFlight]
+#[ORM\UniqueConstraint(
+    name: "unique_flight",
+    columns: ["origin_airport", "arrival_airport", "flight_frequency", "departure_time", "arrival_time", "aircraft_type", "flight_number", "effective_date", "discontinue_date"]
+)]
 class Flights
 {
     #[ORM\Id]
@@ -15,9 +25,11 @@ class Flights
     private ?int $id = null;
 
     #[ORM\Column(length: 3)]
+    #[Assert\NotBlank]
     private ?string $originAirport = null;
 
     #[ORM\Column(length: 3)]
+    #[Assert\NotBlank]
     private ?string $arrivalAirport = null;
 
     #[ORM\Column(length: 7)]
@@ -40,6 +52,14 @@ class Flights
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $discontinueDate = null;
+
+    #[ORM\OneToMany(mappedBy: 'flight', targetEntity: Segments::class)]
+    private Collection $segments;
+
+    public function __construct()
+    {
+        $this->segments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -150,6 +170,36 @@ class Flights
     public function setDiscontinueDate(\DateTimeInterface $discontinueDate): static
     {
         $this->discontinueDate = $discontinueDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Segments>
+     */
+    public function getSegments(): Collection
+    {
+        return $this->segments;
+    }
+
+    public function addSegment(Segments $segment): static
+    {
+        if (!$this->segments->contains($segment)) {
+            $this->segments->add($segment);
+            $segment->setFlight($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSegment(Segments $segment): static
+    {
+        if ($this->segments->removeElement($segment)) {
+            // set the owning side to null (unless already changed)
+            if ($segment->getFlight() === $this) {
+                $segment->setFlight(null);
+            }
+        }
 
         return $this;
     }

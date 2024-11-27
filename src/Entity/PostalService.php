@@ -28,10 +28,14 @@ class PostalService
     #[ORM\Column]
     private ?bool $requiresBilateralAgreement = null;
 
+    #[ORM\OneToMany(mappedBy: 'postalService', targetEntity: Routes::class)]
+    private Collection $routes;
+
 
     public function __construct()
     {
         $this->postalServiceRanges = new ArrayCollection();
+        $this->routes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,6 +105,36 @@ class PostalService
     public function setRequiresBilateralAgreement(bool $requiresBilateralAgreement): static
     {
         $this->requiresBilateralAgreement = $requiresBilateralAgreement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Routes>
+     */
+    public function getRoutes(): Collection
+    {
+        return $this->routes;
+    }
+
+    public function addRoute(Routes $route): static
+    {
+        if (!$this->routes->contains($route)) {
+            $this->routes->add($route);
+            $route->setPostalService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoute(Routes $route): static
+    {
+        if ($this->routes->removeElement($route)) {
+            // set the owning side to null (unless already changed)
+            if ($route->getPostalService() === $this) {
+                $route->setPostalService(null);
+            }
+        }
 
         return $this;
     }

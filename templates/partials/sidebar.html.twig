@@ -21,7 +21,7 @@
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-                id="vertical-hover">
+            id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
@@ -33,75 +33,84 @@
                 <li class="menu-title"><span>Menu</span></li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ active is defined and active == 'home' ? 'active' }}" href="{{ path('app_default_index') }}" role="button"
-                       aria-expanded="false"
-                       aria-controls="sidebarLanding">
+                    <a class="nav-link menu-link {{ active is defined and active == 'home' ? 'active' }}"
+                        href="{{ path('app_default_index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
                         <i class="ri-home-2-line"></i> <span>Inicio</span>
                     </a>
                 </li>
 
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item">
-                        <a class="nav-link menu-link {{ active is defined and active == 'dispatch' ? 'active' }}" href="{{ path('app_secure_dispatch_index') }}" role="button"
-                           aria-expanded="false" aria-controls="sidebarLanding">
-                            <i class="ri-inbox-archive-line"></i> <span>Despachos</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link menu-link {{ active is defined and active == 'send' ? 'active' }}" href="{{ path('app_secure_send') }}" role="button"
-                           aria-expanded="false"
-                           aria-controls="sidebarLanding">
-                            <i class="ri-mail-send-line"></i> <span>Envíos</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link menu-link {{ active is defined and  active == 'office' ? 'active' }}" href="{{ path('app_secure_office_postal') }}" role="button"
-                           aria-expanded="false"
-                           aria-controls="sidebarLanding">
-                            <i class="ri-community-line"></i> <span>Oficinas</span>
-                        </a>
-                    </li>
-
-                {% endif %}
-
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ active is defined and active == 'carrier' ? 'active' }}" href="{{ path('app_secure_carrier') }}" role="button"
-                       aria-expanded="false"
-                       aria-controls="sidebarLanding">
-                        <i class="ri-truck-line"></i> <span>Transportes</span>
+                    <a class="nav-link menu-link {{ active is defined and active == 'dispatch' ? 'active' }}"
+                        href="{{ path('app_secure_dispatch_index') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
+                        <i class="ri-inbox-archive-line"></i> <span>Despachos</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ active is defined and active == 'employee' ? 'active' }}" href="{{ path('app_secure_employee') }}" role="button"
-                       aria-expanded="false"
-                       aria-controls="sidebarLanding">
+                    <a class="nav-link menu-link {{ active is defined and active == 'send' ? 'active' }}"
+                        href="{{ path('app_secure_send') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
+                        <i class="ri-mail-send-line"></i> <span>Envíos</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ active is defined and  active == 'office' ? 'active' }}"
+                        href="{{ path('app_secure_office_postal') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
+                        <i class="ri-community-line"></i> <span>Oficinas</span>
+                    </a>
+                </li>
+
+                {% endif %}
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ active is defined and active == 'routes' ? 'active' }}"
+                        href="{{ path('app_secure_routes') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
+                        <i class="ri-treasure-map-line"></i> <span>Rutas</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ active is defined and active == 'flights' ? 'active' }}"
+                        href="{{ path('app_secure_flights') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
+                        <i class="ri-treasure-map-line"></i> <span>Vuelos</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link {{ active is defined and active == 'employee' ? 'active' }}"
+                        href="{{ path('app_secure_employee') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
                         <i class="ri-team-line"></i> <span>Empleados</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ active is defined and active == 'customer' ? 'active' }}" href="{{ path('app_secure_customer') }}" role="button"
-                       aria-expanded="false"
-                       aria-controls="sidebarLanding">
+                    <a class="nav-link menu-link {{ active is defined and active == 'customer' ? 'active' }}"
+                        href="{{ path('app_secure_customer') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
                         <i class="ri-user-heart-line"></i> <span>Clientes</span>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ active is defined and active == 'S10' ? 'active' }}" href="{{ path('app_secure_upu') }}" role="button"
-                       aria-expanded="false"
-                       aria-controls="sidebarLanding">
+                    <a class="nav-link menu-link {{ active is defined and active == 'S10' ? 'active' }}"
+                        href="{{ path('app_secure_upu') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
                         <i class="ri-barcode-fill"></i> <span>Código S10</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link {{ active is defined and active == 'reminder' ? 'active' }}" href="{{ path('app_logout') }}" role="button"
-                       aria-expanded="false"
-                       aria-controls="sidebarLanding">
+                    <a class="nav-link menu-link {{ active is defined and active == 'reminder' ? 'active' }}"
+                        href="{{ path('app_logout') }}" role="button" aria-expanded="false"
+                        aria-controls="sidebarLanding">
                         <i class="ri-calendar-check-line"></i> <span>Cerrar sesión</span>
                     </a>
                 </li>

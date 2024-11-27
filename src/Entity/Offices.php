@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OfficesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -109,6 +111,18 @@ class Offices
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialRestrictions = null;
+
+    #[ORM\OneToMany(mappedBy: 'originOffice', targetEntity: Routes::class)]
+    private Collection $originOfficeRoutes;
+
+    #[ORM\OneToMany(mappedBy: 'destinationOffice', targetEntity: Routes::class)]
+    private Collection $destinationOfficeRoutes;
+
+    public function __construct()
+    {
+        $this->originOfficeRoutes = new ArrayCollection();
+        $this->destinationOfficeRoutes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -495,6 +509,66 @@ class Offices
     public function setSpecialRestrictions(?string $specialRestrictions): static
     {
         $this->specialRestrictions = $specialRestrictions;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Routes>
+     */
+    public function getOriginOfficeRoutes(): Collection
+    {
+        return $this->originOfficeRoutes;
+    }
+
+    public function addOriginOfficeRoute(Routes $originOfficeRoute): static
+    {
+        if (!$this->originOfficeRoutes->contains($originOfficeRoute)) {
+            $this->originOfficeRoutes->add($originOfficeRoute);
+            $originOfficeRoute->setOriginOffice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOriginOfficeRoute(Routes $originOfficeRoute): static
+    {
+        if ($this->originOfficeRoutes->removeElement($originOfficeRoute)) {
+            // set the owning side to null (unless already changed)
+            if ($originOfficeRoute->getOriginOffice() === $this) {
+                $originOfficeRoute->setOriginOffice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Routes>
+     */
+    public function getDestinationOfficeRoutes(): Collection
+    {
+        return $this->destinationOfficeRoutes;
+    }
+
+    public function addDestinationOfficeRoute(Routes $destinationOfficeRoute): static
+    {
+        if (!$this->destinationOfficeRoutes->contains($destinationOfficeRoute)) {
+            $this->destinationOfficeRoutes->add($destinationOfficeRoute);
+            $destinationOfficeRoute->setDestinationOffice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDestinationOfficeRoute(Routes $destinationOfficeRoute): static
+    {
+        if ($this->destinationOfficeRoutes->removeElement($destinationOfficeRoute)) {
+            // set the owning side to null (unless already changed)
+            if ($destinationOfficeRoute->getDestinationOffice() === $this) {
+                $destinationOfficeRoute->setDestinationOffice(null);
+            }
+        }
 
         return $this;
     }

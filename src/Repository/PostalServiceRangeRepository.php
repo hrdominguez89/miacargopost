@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\PostalProduct;
+use App\Entity\PostalService;
 use App\Entity\PostalServiceRange;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,30 +22,44 @@ class PostalServiceRangeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, PostalServiceRange::class);
     }
-    
-    
-//    /**
-//     * @return PostalServiceRange[] Returns an array of PostalServiceRange objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?PostalServiceRange
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
+    public function getPostalServiceRange(): array
+    {
+        $qb = $this->createQueryBuilder('psr')
+            ->select(
+                'psr.id AS id',
+                'psr.principalCharacter AS principalCharacter',
+                'psr.secondCharacterFrom AS secondCharacterFrom',
+                'psr.secondCharacterTo AS secondCharacterTo',
+                'ps.name AS serviceName',
+                'pp.name as productName'
+            )
+            ->join(PostalService::class, 'ps', 'WITH', 'psr.postalService = ps.id')
+            ->join(PostalProduct::class, 'pp', 'WITH', 'ps.postalProduct = pp.id')
+            ->orderBy('pp.name', 'ASC')
+            ->addOrderBy('ps.name', 'ASC')
+            ->addOrderBy('psr.principalCharacter', 'ASC')
+            ->addOrderBy('psr.secondCharacterFrom', 'ASC');
+
+        $results = $qb->getQuery()->getResult();
+
+        // Formatear los resultados para el `ChoiceType`
+        $postalServiceRange = [];
+        foreach ($results as $result) {
+            $formattedRange = sprintf(
+                '%s - %s (%s%s-%s%s)',
+                $result['productName'],
+                $result['serviceName'],
+                $result['principalCharacter'],
+                $result['secondCharacterFrom'],
+                $result['principalCharacter'],
+                $result['secondCharacterTo']
+            );
+
+            $postalServiceRange[$formattedRange] = $result['id'];
+        }
+
+        return $postalServiceRange;
+    }
 }

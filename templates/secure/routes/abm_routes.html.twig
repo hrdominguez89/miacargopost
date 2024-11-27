@@ -1,0 +1,159 @@
+{% extends 'partials/main.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+<!-- jsvectormap css -->
+<link href="{{ asset('libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+
+<!--Swiper slider css-->
+<link href="{{ asset('libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+
+                    <h4 class="card-title mb-0 flex-grow-1 text-uppercase">
+                        {{ title }}
+                    </h4>
+
+                    <div id="btn-datatable-dt-buttons" class="float-end">
+                        <a href="{{ path('app_secure_new_route') }}" class="btn btn-primary btn-label">
+                            <i class="ri-add-line label-icon align-middle fs-16 me-2"></i>
+                            Crear nueva ruta
+                        </a>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <div class="container-fluid">
+
+                        {{ form_start(form) }}
+                        <div class="row">
+
+
+                            <div class="p-2 col-4">
+                                {{ form_label (form.originOffice) }}
+                                {{ form_widget (form.originOffice) }}
+                                {{ form_errors (form.originOffice)}}
+                            </div>
+
+                            <div class="p-2 col-4">
+                                {{ form_label (form.destinationOffice) }}
+                                {{ form_widget (form.destinationOffice) }}
+                                {{ form_errors (form.destinationOffice)}}
+                            </div>
+                            <div class="p-2 col-4">
+                                {{ form_label (form.serviceRange) }}
+                                {{ form_widget (form.serviceRange) }}
+                                {{ form_errors (form.serviceRange)}}
+                            </div>
+                        </div>
+                        {{ form_errors(form) }}
+                        <div class="row mt-4 mb-4">
+                            <div class="col-12 d-grid gap-2">
+                                <button class="btn btn-block btn-primary" type="submit">Buscar rutas</button>
+                            </div>
+                        </div>
+
+
+                        {{ form_end(form) }}
+                    </div>
+                    <div>
+                        <table id="routes" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Aeropuerto de origen</th>
+                                    <th>Aeropuerto de destino</th>
+                                    <th>Nro de vuelo</th>
+                                    <th>Frecuencia de vuelo</th>
+                                    <th>Horario de partida</th>
+                                    <th>Horario de arribo</th>
+                                    <th>Tipo de aeronave</th>
+                                    <th>Fecha de vigencia</th>
+                                    <th>Fecha de suspención</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for route in routes %}
+                                <tr>
+
+                                    <td>
+                                        {{ route.id }}
+                                    </td>
+
+                                    <td>
+                                        {{ route.originAirport }}
+                                    </td>
+
+                                    <td>
+                                        {{ route.arrivalAirport }}
+                                    </td>
+
+                                    <td>
+                                        {{ route.routeNumber }}
+                                    </td>
+
+                                    <td>
+                                        {{ route.routeFrequency }}
+                                    </td>
+
+                                    <td>
+                                        {{ route.departureTime|date('H:i') }}
+                                    </td>
+
+                                    <td>
+                                        {{ route.arrivalTime|date('H:i') }}
+                                    </td>
+                                    <td>
+                                        {{ route.aircraftType }}
+                                    </td>
+                                    <td>
+                                        {{ route.effectiveDate|date('d/m/Y') }}
+                                    </td>
+                                    <td>
+                                        {{ route.discontinueDate|date('d/m/Y') }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('app_secure_edit_route', { 'id':flight.id}) }}"
+                                            title="Editar vuelo" class="text-warning"><i class="ri-edit-2-line"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+    </div><!-- end row -->
+
+
+
+
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<!-- apexcharts -->
+<script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
+
+<!-- Dashboard init -->
+<script src="{{ asset('js/pages/dashboard-crm.init.js') }}"></script>
+
+
+{% endblock %}

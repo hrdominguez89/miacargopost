@@ -1,0 +1,107 @@
+{% extends 'partials/main.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+<!-- jsvectormap css -->
+<link href="{{ asset('libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+
+<!--Swiper slider css-->
+<link href="{{ asset('libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="p-2 col-xl-12 col-lg-12">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1 text-uppercase">
+                        {{ title }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="container-fluid">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="p-2 col-4">
+                                {{ form_label (form.originAirport) }}
+                                {{ form_widget (form.originAirport) }}
+                                {{ form_errors (form.originAirport)}}
+                            </div>
+                            <div class="p-2 col-4">
+                                {{ form_label (form.arrivalAirport) }}
+                                {{ form_widget (form.arrivalAirport) }}
+                                {{ form_errors (form.arrivalAirport)}}
+                            </div>
+                            <div class="p-2 col-4">
+                                {{ form_label (form.flightNumber) }}
+                                {{ form_widget (form.flightNumber) }}
+                                {{ form_errors (form.flightNumber)}}
+                            </div>
+                            <div class="p-2 col-9">
+                                {{ form_label (form.flightFrequency) }}
+                                {{ form_widget (form.flightFrequency) }}
+                                {{ form_errors (form.flightFrequency)}}
+                            </div>
+
+                            <div class="p-2 col-3">
+                                {{ form_label (form.aircraftType) }}
+                                {{ form_widget (form.aircraftType) }}
+                                {{ form_errors (form.aircraftType)}}
+                            </div>
+                            <div class="p-2 col-3">
+                                {{ form_label (form.departureTime) }}
+                                {{ form_widget (form.departureTime) }}
+                                {{ form_errors (form.departureTime)}}
+                            </div>
+                            <div class="p-2 col-3">
+                                {{ form_label (form.arrivalTime) }}
+                                {{ form_widget (form.arrivalTime) }}
+                                {{ form_errors (form.arrivalTime)}}
+                            </div>
+                            <div class="p-2 col-3">
+                                {{ form_label (form.effectiveDate) }}
+                                {{ form_widget (form.effectiveDate) }}
+                                {{ form_errors (form.effectiveDate)}}
+                            </div>
+                            <div class="p-2 col-3">
+                                {{ form_label (form.discontinueDate) }}
+                                {{ form_widget (form.discontinueDate) }}
+                                {{ form_errors (form.discontinueDate)}}
+                            </div>
+                            {{ form_errors(form) }}
+                            <div class="p-2 col-12 text-end">
+                                <a href="{{ path('app_secure_flights') }}" class="btn btn-light m-2">Cancelar</a>
+                                <button class="btn btn-primary m-2" type="submit">Guardar vuelo</button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+        </div><!-- end row -->
+
+
+
+
+    </div>
+
+    {% endblock %}
+
+    {% block javascripts %}
+
+    {{ parent() }}
+
+    <!-- apexcharts -->
+    <script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
+
+    <!-- Dashboard init -->
+    <script src="{{ asset('js/pages/dashboard-crm.init.js') }}"></script>
+
+
+    {% endblock %}

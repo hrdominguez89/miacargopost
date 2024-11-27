@@ -31,9 +31,13 @@ class PostalServiceRange
     #[ORM\OneToMany(mappedBy: 'postalServiceRange', targetEntity: S10Code::class)]
     private Collection $s10codes;
 
+    #[ORM\OneToMany(mappedBy: 'serviceRange', targetEntity: RouteServiceRange::class)]
+    private Collection $routeServiceRanges;
+
     public function __construct()
     {
         $this->s10codes = new ArrayCollection();
+        $this->routeServiceRanges = new ArrayCollection();
     }
 
 
@@ -114,6 +118,36 @@ class PostalServiceRange
             // set the owning side to null (unless already changed)
             if ($s10codes->getPostalServiceRange() === $this) {
                 $s10codes->setPostalServiceRange(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RouteServiceRange>
+     */
+    public function getRouteServiceRanges(): Collection
+    {
+        return $this->routeServiceRanges;
+    }
+
+    public function addRouteServiceRange(RouteServiceRange $routeServiceRange): static
+    {
+        if (!$this->routeServiceRanges->contains($routeServiceRange)) {
+            $this->routeServiceRanges->add($routeServiceRange);
+            $routeServiceRange->setServiceRange($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRouteServiceRange(RouteServiceRange $routeServiceRange): static
+    {
+        if ($this->routeServiceRanges->removeElement($routeServiceRange)) {
+            // set the owning side to null (unless already changed)
+            if ($routeServiceRange->getServiceRange() === $this) {
+                $routeServiceRange->setServiceRange(null);
             }
         }
 
