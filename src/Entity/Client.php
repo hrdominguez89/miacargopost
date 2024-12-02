@@ -6,6 +6,10 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -134,4 +138,24 @@ class Client
 
         return $this;
     }
+    public static function loadValidatorMetadata(ClassMetadata $metadata){
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank(
+            ['message' => 'Por favor ingresar nombre' ]));
+            $metadata->addPropertyConstraint('typeDocument', new Assert\NotBlank(
+                ['message' => 'Por favor ingrese tipo de documento' ]));
+            $metadata->addPropertyConstraint('document', new Assert\NotBlank(
+                ['message' => 'Por favor ingrese el documento' ]));
+            $metadata->addPropertyConstraint('email', new Assert\NotBlank(
+                ['message' => 'Por favor ingrese un email' ]));
+            $metadata->addPropertyConstraint('telephone', new Assert\NotBlank(
+                ['message' => 'Por favor ingrese un telefono' ]));
+            
+        /* $metadata->addConstraint(new UniqueEntity([
+                'fields' => 'impcCode',
+                'message' => 'Valida impc Code ingresado ya que es único',
+                
+            ])); */
+    }
+
+
 }

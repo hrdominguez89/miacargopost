@@ -33,7 +33,10 @@
                     {{ form_start (clientForm, {attr: { 'data-turbo': 'false' } }) }}
 
                     <div>
-                        {{ form_row (clientForm.name) }}
+                        {{ form_label (clientForm.name) }}
+                        {{ form_widget (clientForm.name) }}
+                        {{ form_errors (clientForm.name) }}
+
                     </div>
                     <div class=" row">
                             <div class="col-xl-6">
