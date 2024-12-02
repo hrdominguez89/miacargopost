@@ -39,9 +39,7 @@ class FlightsController extends AbstractController
 
             return $this->redirectToRoute('app_secure_flights');
         }
-
-
-        return $this->render('secure/flights/form_flights.html.twig', $data);
+        return $this->render('secure/flights/form_flights.html.twig', $data)->setStatusCode(Response::HTTP_OK);;
     }
 
     #[Route('/edit/{id}', name: 'app_secure_edit_flight')]
@@ -59,9 +57,7 @@ class FlightsController extends AbstractController
 
             return $this->redirectToRoute('app_secure_flights');
         }
-
-
-        return $this->render('secure/flights/form_flights.html.twig', $data);
+        return $this->render('secure/flights/form_flights.html.twig', $data)->setStatusCode(Response::HTTP_OK);
     }
 
     #[Route('/search', name: 'app_secure_search_flights', methods: ['POST'])]
@@ -71,22 +67,44 @@ class FlightsController extends AbstractController
 
         $originAirport = $data['originAirport'] ?? null;
         $arrivalAirport = $data['arrivalAirport'] ?? null;
+        $idFlightsSelected = $data['idFlightsSelected'] ?? [];
 
         $today = new \DateTime();
 
-        // Consultar la base de datos
-        $flights = $flightsRepository->createQueryBuilder('f')
+        // Crear la consulta
+        $qb = $flightsRepository->createQueryBuilder('f')
             ->where('f.originAirport = :originAirport')
             ->andWhere('f.arrivalAirport = :arrivalAirport')
             ->andWhere('f.effectiveDate <= :today')
             ->andWhere('f.discontinueDate >= :today')
             ->setParameter('originAirport', $originAirport)
             ->setParameter('arrivalAirport', $arrivalAirport)
-            ->setParameter('today', $today->format('Y-m-d'))
-            ->getQuery()
-            ->getResult();
+            ->setParameter('today', $today->format('Y-m-d'));
 
-        // Retornar la respuesta en JSON
-        return $this->json($flights);
+        // Condicional para excluir los vuelos ya seleccionados
+        if (!empty($idFlightsSelected)) {
+            $qb->andWhere('f.id NOT IN (:idFlightsSelected)')
+                ->setParameter('idFlightsSelected', $idFlightsSelected);
+        }
+
+        // Ejecutar la consulta
+        $flights = $qb->getQuery()->getResult();
+
+        $flightsArray = array_map(function ($flight) {
+            return [
+                'id' => $flight->getId(),
+                'originAirport' => $flight->getOriginAirport(),
+                'arrivalAirport' => $flight->getArrivalAirport(),
+                'flightNumber' => $flight->getFlightNumber(),
+                'flightFrequency' => $flight->getFlightFrequency(),
+                'departureTime' => $flight->getDepartureTime(),
+                'arrivalTime' => $flight->getArrivalTime(),
+                'aircraftType' => $flight->getAircraftType(),
+                'effectiveDate' => $flight->getEffectiveDate()->format('Y-m-d'),
+                'discontinueDate' => $flight->getDiscontinueDate()->format('Y-m-d'),
+            ];
+        }, $flights);
+
+        return $this->json($flightsArray);
     }
 }

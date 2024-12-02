@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RoutesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RoutesRepository::class)]
@@ -15,9 +16,7 @@ class Routes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'routes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?PostalService $postalService = null;
+    
 
     #[ORM\ManyToOne(inversedBy: 'originOfficeRoutes')]
     #[ORM\JoinColumn(nullable: false)]
@@ -33,6 +32,12 @@ class Routes
     #[ORM\OneToMany(mappedBy: 'routes', targetEntity: RouteServiceRange::class)]
     private Collection $routeServiceRanges;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $effectiveFrom = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $validUntil = null;
+
     public function __construct()
     {
         $this->segments = new ArrayCollection();
@@ -42,18 +47,6 @@ class Routes
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getPostalService(): ?PostalService
-    {
-        return $this->postalService;
-    }
-
-    public function setPostalService(?PostalService $postalService): static
-    {
-        $this->postalService = $postalService;
-
-        return $this;
     }
 
     public function getOriginOffice(): ?Offices
@@ -136,6 +129,30 @@ class Routes
                 $routeServiceRange->setRoutes(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEffectiveFrom(): ?\DateTimeInterface
+    {
+        return $this->effectiveFrom;
+    }
+
+    public function setEffectiveFrom(\DateTimeInterface $effectiveFrom): static
+    {
+        $this->effectiveFrom = $effectiveFrom;
+
+        return $this;
+    }
+
+    public function getValidUntil(): ?\DateTimeInterface
+    {
+        return $this->validUntil;
+    }
+
+    public function setValidUntil(\DateTimeInterface $validUntil): static
+    {
+        $this->validUntil = $validUntil;
 
         return $this;
     }

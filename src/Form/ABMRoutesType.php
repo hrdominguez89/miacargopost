@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class ABMRoutesType extends AbstractType
 {
@@ -26,25 +27,34 @@ class ABMRoutesType extends AbstractType
                 'choices' => $this->officesRepository->getCountriesFromOfficesQueryBuilder('A'),
                 'placeholder' => 'Seleccione una oficina de origen',
                 'label' => 'Oficina de origen <span class="text-danger">*</span>',
-                'required' => true,
+                'required' => false,
                 'label_html' => true,
-                'attr' => ['class' => 'choices-single-default-label']
+                'attr' => ['class' => 'choices-single-default-label'],
+                'constraints' => [
+                    new NotNull(['message' => 'Debe seleccionar una oficina de origen.']),
+                ],
             ])
             ->add('destinationOffice', ChoiceType::class, [
                 'choices' => $this->officesRepository->getCountriesFromOfficesQueryBuilder('A'),
                 'placeholder' => 'Seleccione una oficina de destino',
                 'label' => 'Oficina de destino <span class="text-danger">*</span>',
-                'required' => true,
+                'required' => false,
                 'label_html' => true,
-                'attr' => ['class' => 'choices-single-default-label']
+                'attr' => ['class' => 'choices-single-default-label'],
+                'constraints' => [
+                    new NotNull(['message' => 'Debe seleccionar una oficina de destino.']),
+                ],
             ])
             ->add('serviceRange', ChoiceType::class, [
                 'choices' => $this->postalServiceRangeRepository->getPostalServiceRange(),
                 'placeholder' => 'Seleccione una Clase/Subclase',
                 'label' => 'Clase/Subclase <span class="text-danger">*</span>',
-                'required' => true,
+                'required' => false,
                 'label_html' => true,
-                'attr' => ['class' => 'choices-single-default-label']
+                'attr' => ['class' => 'choices-single-default-label'],
+                'constraints' => [
+                    new NotNull(['message' => 'Debe seleccionar una Clase/Subclase.']),
+                ],
             ])
         ;
     }

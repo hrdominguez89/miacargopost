@@ -27,7 +27,7 @@
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Seleccionar</th>
+                                <th></th>
                                 <th>Origen</th>
                                 <th>Destino</th>
                                 <th>Número de Vuelo</th>
@@ -117,6 +117,7 @@
                                     <table class="table table-striped table-hover">
                                         <thead>
                                             <tr>
+                                                <th>Orden</th>
                                                 <th>Origen</th>
                                                 <th>Destino</th>
                                                 <th>Número de Vuelo</th>
@@ -171,6 +172,46 @@
             let fetchedFlights = []; // Variable global para almacenar los vuelos disponibles
             let selectedSegments = []; // Array para almacenar los vuelos seleccionados
 
+            const segmentsInput = $('#routes_segments').val();
+
+            if (segmentsInput) {
+                try {
+                    selectedSegments = JSON.parse(segmentsInput); // Parsear los datos del input hidden
+                    selectedSegments.forEach((segment, index) => {
+                        // Agregar cada segmento a la tabla
+                        const segmentRow = `
+                    <tr data-id="${segment.id}">
+                        <td class="text-center">${index + 1}</td>
+                        <td>${segment.originAirport}</td>
+                        <td>${segment.arrivalAirport}</td>
+                        <td>${segment.flightNumber}</td>
+                        <td>${segment.flightFrequency}</td>
+                        <td>${new Date(segment.departureTime).toTimeString().slice(0, 5)}</td>
+                        <td>${new Date(segment.arrivalTime).toTimeString().slice(0, 5)} ${new Date(segment.arrivalTime) < new Date(segment.departureTime) ? "(+1 día)" : ""}</td>
+                        <td>${segment.aircraftType}</td>
+                        <td>${new Date(segment.effectiveDate).toLocaleDateString()}</td>
+                        <td>${new Date(segment.discontinueDate).toLocaleDateString()}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm remove-segment" data-id="${segment.id}">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+                        $('#segmentsTableBody').append(segmentRow);
+                    });
+                } catch (error) {
+                    console.error('Error al parsear los segmentos:', error);
+                }
+            }
+
+
+            $(document).on('click', '.selectable-row', function (e) {
+                // Evitar que se dispare si se hace clic directamente en el input radio
+                if (!$(e.target).is('input[type="radio"]')) {
+                    // Encontrar el input radio dentro de la fila y seleccionarlo
+                    $(this).find('input[type="radio"]').prop('checked', true);
+                }
+            });
+
             // Buscar vuelos al hacer clic en el botón "Buscar vuelos"
             $('#segmentoModalButton').on('click', function () {
                 // Validar los aeropuertos seleccionados
@@ -193,6 +234,7 @@
                     body: JSON.stringify({
                         originAirport: airportOriginCode,
                         arrivalAirport: airportArrivalCode,
+                        idFlightsSelected: selectedSegments[selectedSegments.length - 1] ? selectedSegments.map(flight => flight.id) : null
                     }),
                 })
                     .then(response => response.json())
@@ -214,7 +256,7 @@
                         // Generar las filas de la tabla
                         data.forEach(flight => {
                             const row = `
-                            <tr>
+                            <tr class="selectable-row" data-id="${flight.id}" style="pointer:hand">
                                 <td>
                                     <input type="radio" name="selectedFlight" value="${flight.id}">
                                 </td>
@@ -222,8 +264,8 @@
                                 <td>${flight.arrivalAirport}</td>
                                 <td>${flight.flightNumber}</td>
                                 <td>${flight.flightFrequency}</td>
-                                <td>${new Date(flight.departureTime).toLocaleTimeString()}</td>
-                                <td>${new Date(flight.arrivalTime).toLocaleTimeString()}</td>
+                                <td>${new Date(flight.departureTime).toTimeString().slice(0, 5)}</td>
+                                <td>${new Date(flight.arrivalTime).toTimeString().slice(0, 5)} ${new Date(flight.arrivalTime) < new Date(flight.departureTime) ? "(+1 día)" : ""}</td>
                                 <td>${flight.aircraftType}</td>
                                 <td>${new Date(flight.effectiveDate).toLocaleDateString()}</td>
                                 <td>${new Date(flight.discontinueDate).toLocaleDateString()}</td>
@@ -277,12 +319,13 @@
                 // Renderizar el vuelo en la tabla
                 const segmentRow = `
                     <tr data-id="${flight.id}">
+                        <td class="text-center">${selectedSegments.length}</td>
                         <td>${flight.originAirport}</td>
                         <td>${flight.arrivalAirport}</td>
                         <td>${flight.flightNumber}</td>
                         <td>${flight.flightFrequency}</td>
-                        <td>${new Date(flight.departureTime).toLocaleTimeString()}</td>
-                        <td>${new Date(flight.arrivalTime).toLocaleTimeString()}</td>
+                        <td>${new Date(flight.departureTime).toTimeString().slice(0, 5)}</td>
+                        <td>${new Date(flight.arrivalTime).toTimeString().slice(0, 5)} ${new Date(flight.arrivalTime) < new Date(flight.departureTime) ? "(+1 día)" : ""}</td>
                         <td>${flight.aircraftType}</td>
                         <td>${new Date(flight.effectiveDate).toLocaleDateString()}</td>
                         <td>${new Date(flight.discontinueDate).toLocaleDateString()}</td>
@@ -292,6 +335,9 @@
                     </tr>
                 `;
                 $('#segmentsTableBody').append(segmentRow);
+
+                // Actualizar el input hidden
+                updateSegmentsInput();
             }
 
             // Función para eliminar un segmento de la lista
@@ -301,6 +347,14 @@
 
                 // Eliminar la fila de la tabla visualmente
                 $(`#segmentsTableBody tr[data-id="${flightId}"]`).remove();
+
+                // Renumerar las filas restantes
+                $('#segmentsTableBody tr').each(function (index) {
+                    $(this).find('td:first').text(index + 1);
+                });
+
+                // Actualizar el input hidden
+                updateSegmentsInput();
             }
 
             // Manejar el clic en el botón de eliminar (delegado para elementos dinámicos)
@@ -308,15 +362,18 @@
                 const flightId = $(this).data('id');
                 removeSegment(flightId);
             });
-            function updateSegmentsInput() {
-                $('#segmentsInput').val(JSON.stringify(selectedSegments));
-            }
 
-            // Llamar a esta función cada vez que se modifiquen los segmentos
-            $('form').on('submit', function () {
-                updateSegmentsInput();
-            });
+            function updateSegmentsInput() {
+                // Asignar el array formateado al input hidden
+                if (selectedSegments.length) {
+                    $('#routes_segments').val(JSON.stringify(selectedSegments));
+                } else {
+                    $('#routes_segments').val(null);
+                }
+            }
         });
+
+
     </script>
 
     {% endblock %}

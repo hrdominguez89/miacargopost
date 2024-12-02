@@ -21,28 +21,18 @@ class RoutesRepository extends ServiceEntityRepository
         parent::__construct($registry, Routes::class);
     }
 
-//    /**
-//     * @return Routes[] Returns an array of Routes objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByCriteria($originOffice, $destinationOffice, $postalServiceRange)
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->join('r.routeServiceRanges', 'rsr') // Relación con RouteServiceRange
+            ->join('rsr.serviceRange', 'psr')    // Relación con PostalServiceRange
+            ->where('r.originOffice = :originOffice')
+            ->andWhere('r.destinationOffice = :destinationOffice')
+            ->andWhere('psr.id = :postalServiceRange')
+            ->setParameter('originOffice', $originOffice)
+            ->setParameter('destinationOffice', $destinationOffice)
+            ->setParameter('postalServiceRange', $postalServiceRange);
 
-//    public function findOneBySomeField($value): ?Routes
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getResult();
+    }
 }

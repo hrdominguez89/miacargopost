@@ -31,17 +31,17 @@ class FlightsType extends AbstractType
                 'choices' => $this->officesRepository->findUniqueAirportsWithCountryName('A'),
                 'placeholder' => 'Seleccione un aeropuerto',
                 'label' => 'Aeropuerto de origen <span class="text-danger">*</span>',
-                'required' => true,
+                'required' => false,
                 'label_html' => true,
-                'attr'=>['class'=>'choices-single-default-label']
+                'attr' => ['class' => 'choices-single-default-label'],
             ])
             ->add('arrivalAirport', ChoiceType::class, [
                 'choices' => $this->officesRepository->findUniqueAirportsWithCountryName('A'),
                 'placeholder' => 'Seleccione un aeropuerto',
                 'label' => 'Aeropuerto de destino <span class="text-danger">*</span>',
-                'required' => true,
+                'required' => false,
                 'label_html' => true,
-                'attr'=>['class'=>'choices-single-default-label']
+                'attr' => ['class' => 'choices-single-default-label'],
             ])
             ->add('flightNumber', TextType::class, [
                 'label' => 'Nro de vuelo <span class="text-danger">*</span>',

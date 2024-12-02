@@ -68,10 +68,40 @@
                         {{ form_end(form) }}
                     </div>
                     <div>
-                        <table id="routes" class="table table-striped">
-                            <thead>
+                        {% for route in routes %}
+                        <table class="table table-striped table-bordered">
+                            <tbody>
                                 <tr>
-                                    <th>ID</th>
+                                    <th colspan="10">Ruta</th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Oficina de origen</th>
+                                    <th>Oficina de destino</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <i class="ri-treasure-map-line"></i>
+                                    </td>
+                                    <td>
+                                        {{ route.originOffice.impcCode }}
+                                    </td>
+                                    <td>
+                                        {{ route.destinationOffice.impcCode }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('app_secure_edit_route', { 'id':route.id}) }}"
+                                            title="Editar ruta" class="text-warning"><i class="ri-edit-2-line"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="10" class="text-center">
+                                        Segmentos
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
                                     <th>Aeropuerto de origen</th>
                                     <th>Aeropuerto de destino</th>
                                     <th>Nro de vuelo</th>
@@ -81,57 +111,52 @@
                                     <th>Tipo de aeronave</th>
                                     <th>Fecha de vigencia</th>
                                     <th>Fecha de suspención</th>
-                                    <th></th>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {% for route in routes %}
+                                {% for segment in route.segments %}
                                 <tr>
 
                                     <td>
-                                        {{ route.id }}
+                                        <i class="ri-flight-takeoff-line"></i>
                                     </td>
 
                                     <td>
-                                        {{ route.originAirport }}
+                                        {{ segment.flight.originAirport }}
                                     </td>
 
                                     <td>
-                                        {{ route.arrivalAirport }}
+                                        {{ segment.flight.arrivalAirport }}
                                     </td>
 
                                     <td>
-                                        {{ route.routeNumber }}
+                                        {{ segment.flight.flightNumber }}
                                     </td>
 
                                     <td>
-                                        {{ route.routeFrequency }}
+                                        {{ segment.flight.flightFrequency }}
                                     </td>
 
                                     <td>
-                                        {{ route.departureTime|date('H:i') }}
+                                        {{ segment.flight.departureTime|date('H:i') }}
                                     </td>
 
                                     <td>
-                                        {{ route.arrivalTime|date('H:i') }}
+                                        {{ segment.flight.arrivalTime|date('H:i') }}
                                     </td>
                                     <td>
-                                        {{ route.aircraftType }}
+                                        {{ segment.flight.aircraftType }}
                                     </td>
                                     <td>
-                                        {{ route.effectiveDate|date('d/m/Y') }}
+                                        {{ segment.flight.effectiveDate|date('d/m/Y') }}
                                     </td>
                                     <td>
-                                        {{ route.discontinueDate|date('d/m/Y') }}
-                                    </td>
-                                    <td>
-                                        <a href="{{ path('app_secure_edit_route', { 'id':flight.id}) }}"
-                                            title="Editar vuelo" class="text-warning"><i class="ri-edit-2-line"></i></a>
+                                        {{ segment.flight.discontinueDate|date('d/m/Y') }}
                                     </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+                        <hr>
+                        {% endfor %}
                     </div>
                 </div><!-- end card body -->
             </div><!-- end card -->

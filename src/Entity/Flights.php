@@ -25,11 +25,11 @@ class Flights
     private ?int $id = null;
 
     #[ORM\Column(length: 3)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Debe seleccionar un aeropuerto de origen.')]
     private ?string $originAirport = null;
 
     #[ORM\Column(length: 3)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Debe seleccionar un aeropuerto de destino.')]
     private ?string $arrivalAirport = null;
 
     #[ORM\Column(length: 7)]
