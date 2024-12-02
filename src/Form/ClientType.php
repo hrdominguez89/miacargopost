@@ -11,6 +11,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+
+
 
 
 class ClientType extends AbstractType
@@ -18,11 +21,21 @@ class ClientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('typeDocument')
-            ->add('document')
-            ->add('email')
-            ->add('telephone')
+            ->add('name', TextType::class, [
+                'label' => 'Nombres',
+                'required' => true,])
+            ->add('typeDocument',TextType::class, [
+                'label' => 'Tipo de documento',
+                'required' => true,])
+            ->add('document',TextType::class, [
+                'label' => 'Documento',
+                'required' => true,])
+            ->add('email',EmailType::class, [
+                'label' => 'email',
+                'required' => true,])
+            ->add('telephone',TextType::class, [
+                'label' => 'Teléfono',
+                'required' => true,])
             ->add('clientAddresses', CollectionType::class, [
                 'entry_type' => AddressType::class, 
                 'entry_options' => ['label' => false], 
