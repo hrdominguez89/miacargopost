@@ -54,8 +54,8 @@ class DispatchController extends AbstractController
         return $this->render('secure/dispatch/new_dispatch.html.twig', $data);
     }
 
-    #[Route('/new', name: 'app_secure_new_dispatch')]
-    public function new(Request $request, EntityManagerInterface $em, OfficesRepository $officesRepository, RoutesRepository $routesRepository, StatusDispatchRepository $statusDispatchRepository, PostalServiceRangeRepository $postalServiceRangeRepository): Response
+    #[Route('/edit', name: 'app_secure_edit_dispatch')]
+    public function edit(Request $request, EntityManagerInterface $em, OfficesRepository $officesRepository, RoutesRepository $routesRepository, StatusDispatchRepository $statusDispatchRepository, PostalServiceRangeRepository $postalServiceRangeRepository): Response
     {
         $data['active'] = 'dispatch';
         $data['title'] = 'Crear despacho';
