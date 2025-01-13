@@ -35,4 +35,25 @@ class RoutesRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findByCriteriaDate($originOffice, $destinationOffice, $postalServiceRange)
+    {
+        $today = new \DateTime();
+
+        $qb = $this->createQueryBuilder('r')
+            ->join('r.routeServiceRanges', 'rsr') // Relación con RouteServiceRange
+            ->join('rsr.serviceRange', 'psr')    // Relación con PostalServiceRange
+            ->where('r.originOffice = :originOffice')
+            ->andWhere('r.destinationOffice = :destinationOffice')
+            ->andWhere('psr.id = :postalServiceRange')
+            ->andWhere('r.effectiveFrom <= :today')
+            ->andWhere('r.validUntil >= :today')
+            ->setParameter('originOffice', $originOffice)
+            ->setParameter('destinationOffice', $destinationOffice)
+            ->setParameter('postalServiceRange', $postalServiceRange)
+            ->setParameter('today', $today->format('Y-m-d'))
+            ->orderBy('r.validUntil','DESC');
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

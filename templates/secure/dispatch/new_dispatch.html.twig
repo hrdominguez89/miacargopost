@@ -1,0 +1,199 @@
+{% extends 'partials/main.html.twig' %}
+
+{% block stylesheets %}
+
+{{ parent() }}
+
+<!-- jsvectormap css -->
+<link href="{{ asset('libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+
+<!--Swiper slider css-->
+<link href="{{ asset('libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+
+{% endblock %}
+
+{% block content %}
+
+<style>
+.select-disabled {
+    pointer-events: none; /* Evita la interacción con el usuario */
+    background-color: #e9ecef; /* Color gris similar al deshabilitado */
+    opacity: 1; /* Asegura que el texto siga siendo completamente visible */
+    cursor: not-allowed; /* Cambia el cursor para mostrar que está bloqueado */
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card card-height-100">
+                <div class="card-header align-items-center d-flex">
+
+                    <h4 class="card-title mb-0 flex-grow-1 text-uppercase">
+                        {{ title }}
+                    </h4>
+
+                    
+
+                </div>
+                <div class="card-body">
+                    <div class="container-fluid">
+
+                        {{ form_start(form) }}
+                        <div class="row">
+
+
+                            <div class="p-2 col-4">
+                                {{ form_label (form.originOffice) }}
+                                {{ form_widget (form.originOffice) }}
+                                {{ form_errors (form.originOffice)}}
+                            </div>
+
+                            <div class="p-2 col-4">
+                                {{ form_label (form.destinationOffice) }}
+                                {{ form_widget (form.destinationOffice) }}
+                                {{ form_errors (form.destinationOffice)}}
+                            </div>
+                            <div class="p-2 col-4">
+                                {{ form_label (form.postalServiceRange) }}
+                                {{ form_widget (form.postalServiceRange) }}
+                                {{ form_errors (form.postalServiceRange)}}
+                            </div>
+                            <div class="p-2 col-12 text-center">
+                                <p class="text-danger" id="errorOfficeClaseSubclaseSelected"></p>
+                            </div>
+                        </div>
+                        {{ form_errors(form) }}
+                        <div class="row mt-4 mb-4">
+                            <div class="col-12 d-grid gap-2">
+                                <button type="button" id="rutasDisponiblesModalButton" class="btn btn-block btn-primary">Buscar rutas</button>
+                            </div>
+                        </div>
+                        
+                        <div class="row" id="infoErrorDespachoDiv" style="display:none;">
+                            <div class="p-2 col-12 text-center">
+                                <h4 class="text-danger">No se encontró una ruta para este despacho.</h4>
+                                <div id="btn-datatable-dt-buttons" class="text-center">
+                                    <a href="{{ path('app_secure_new_route') }}" class="btn btn-primary btn-label">
+                                        <i class="ri-add-line label-icon align-middle fs-16 me-2"></i>
+                                        Crear nueva ruta
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="infoDespachoDiv" style="display:none;">
+                            <div class="p-2 col-12">
+                                <h4>Información de despacho</h4>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Nro de despacho: </th><td class="infoDespacho" id="numberDispatch"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Primer tramo: </th><td class="infoDespacho" id="firstFlight"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Fecha hora de salida: </th><td class="infoDespacho" id="dateFirstFlight"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Itinerario: </th><td class="infoDespacho" id="itinerary"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="p-2 col-12 text-end">
+                                <a href="{{ path('app_secure_dispatch_index') }}" class="btn btn-light m-2">Cancelar</a>
+                                <button class="btn btn-primary m-2" type="submit">Crear despacho</button>
+                            </div>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div><!-- end card body -->
+            </div><!-- end card -->
+        </div><!-- end col -->
+    </div><!-- end row -->
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+{{ parent() }}
+
+<!-- apexcharts -->
+<script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
+
+<!-- Dashboard init -->
+<script src="{{ asset('js/pages/dashboard-crm.init.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+        listenBuscarRutas();
+        listenChangeSelects();
+    });
+
+    const listenChangeSelects = ()=>{
+        $('#dispatch_originOffice, #dispatch_destinationOffice, #dispatch_postalServiceRange').on('change', cleanInputs);
+    }
+
+    const cleanInputs = ()=>{
+        $('#infoErrorDespachoDiv').hide();
+        $('#infoDespachoDiv td').empty();
+        $('.hiddenDispatch').val('');
+        $('#infoDespachoDiv').hide();
+    }
+
+    const listenBuscarRutas = ()=>{
+         $('#rutasDisponiblesModalButton').on('click', function () {
+            // Validar las oficinas seleccionados
+            let originOffice = $('#dispatch_originOffice option:selected').val();
+            let destinationOffice = $('#dispatch_destinationOffice option:selected').val();
+            let claseSubclase = $('#dispatch_postalServiceRange option:selected').val();
+
+            if ($('#dispatch_originOffice option:selected').val() === '' || $('#dispatch_destinationOffice option:selected').val() === '' || $('#dispatch_postalServiceRange option:selected').val() === '') {
+                $('#errorOfficeClaseSubclaseSelected').html('Debe seleccionar una oficina de origen, una oficina de destino y una clase/subclase');
+                return;
+            }
+
+            $('#errorOfficeClaseSubclaseSelected').html('');
+
+            // Realizar la solicitud para obtener las rutas
+            fetch('/secure/routes/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    originOffice: originOffice,
+                    destinationOffice: destinationOffice,
+                    claseSubclase: claseSubclase
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    $('#infoErrorDespachoDiv').hide();
+                    $('#infoDespachoDiv td').empty();
+                    $('.hiddenDispatch').val('');
+                    $('#dispatch_numberDispatch').val(data.flights.numberDispatch);
+                    $('#dispatch_itinerary').val(data.flights.itinerary);
+                    $('#dispatch_routeId').val(data.flights.routeId);
+                    $('#numberDispatch').html(data.flights.numberDispatch.toString().padStart(4, '0'));
+                    $('#firstFlight').html(data.flights.firstFlight);
+                    $('#dateFirstFlight').html(data.flights.dateFirstFlight);
+                    $('#itinerary').html(data.flights.itinerary.replace(/,/g, '<br>'));
+                    $('#infoDespachoDiv').show();
+                    $('#errorOfficeClaseSubclaseSelected').html('');
+                })
+                .catch(error => {
+                    $('#infoErrorDespachoDiv').show();
+                    $('#infoDespachoDiv').hide();
+                    $('#infoDespachoDiv td').empty();
+                    $('.hiddenDispatch').val('');
+                });
+        });
+    }
+</script>
+
+{% endblock %}

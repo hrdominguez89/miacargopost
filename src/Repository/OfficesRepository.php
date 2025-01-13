@@ -87,7 +87,7 @@ class OfficesRepository extends ServiceEntityRepository
     public function getCountriesFromOfficesQueryBuilder($category): array
     {
         $qb = $this->createQueryBuilder('o')
-            ->select('o.impcCode as office', 'o.impcCodeFullName as fullName') // Selecciona ambos campos
+            ->select('o.id as id, o.impcCode as office', 'o.impcCodeFullName as fullName') // Selecciona ambos campos
             ->where('o.categoryAInbound = :category')
             ->andWhere('o.impcCode LIKE :endsWith') // Filtrar los que terminan en "A"
             ->setParameter('category', $category)
@@ -101,7 +101,7 @@ class OfficesRepository extends ServiceEntityRepository
         $offices = [];
         foreach ($results as $result) {
             $formattedOffice = $result['office'] . ' (' . $result['fullName'] . ')'; // Formato deseado
-            $offices[$formattedOffice] = $result['office']; // Llave es "office (fullName)", valor es solo el código
+            $offices[$formattedOffice] = $result['id']; // Llave es "office (fullName)", valor es solo el código
         }
 
         return $offices;

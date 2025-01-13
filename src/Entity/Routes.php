@@ -38,10 +38,14 @@ class Routes
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $validUntil = null;
 
+    #[ORM\OneToMany(mappedBy: 'Route', targetEntity: Dispatch::class)]
+    private Collection $dispatches;
+
     public function __construct()
     {
         $this->segments = new ArrayCollection();
         $this->routeServiceRanges = new ArrayCollection();
+        $this->dispatches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -153,6 +157,36 @@ class Routes
     public function setValidUntil(\DateTimeInterface $validUntil): static
     {
         $this->validUntil = $validUntil;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dispatch>
+     */
+    public function getDispatches(): Collection
+    {
+        return $this->dispatches;
+    }
+
+    public function addDispatch(Dispatch $dispatch): static
+    {
+        if (!$this->dispatches->contains($dispatch)) {
+            $this->dispatches->add($dispatch);
+            $dispatch->setRoute($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDispatch(Dispatch $dispatch): static
+    {
+        if ($this->dispatches->removeElement($dispatch)) {
+            // set the owning side to null (unless already changed)
+            if ($dispatch->getRoute() === $this) {
+                $dispatch->setRoute(null);
+            }
+        }
 
         return $this;
     }

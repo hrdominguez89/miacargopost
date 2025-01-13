@@ -127,10 +127,18 @@ class Offices
     #[ORM\OneToMany(mappedBy: 'destinationOffice', targetEntity: Routes::class)]
     private Collection $destinationOfficeRoutes;
 
+    #[ORM\OneToMany(mappedBy: 'originOffice', targetEntity: Dispatch::class)]
+    private Collection $originOfficeDispatches;
+
+    #[ORM\OneToMany(mappedBy: 'destinationOffice', targetEntity: Dispatch::class)]
+    private Collection $destinationOfficeDispatches;
+
     public function __construct()
     {
         $this->originOfficeRoutes = new ArrayCollection();
         $this->destinationOfficeRoutes = new ArrayCollection();
+        $this->originOfficeDispatches = new ArrayCollection();
+        $this->destinationOfficeDispatches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -602,6 +610,66 @@ class Offices
             // set the owning side to null (unless already changed)
             if ($destinationOfficeRoute->getDestinationOffice() === $this) {
                 $destinationOfficeRoute->setDestinationOffice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dispatch>
+     */
+    public function getOriginOfficeDispatches(): Collection
+    {
+        return $this->originOfficeDispatches;
+    }
+
+    public function addOriginOfficeDispatch(Dispatch $originOfficeDispatch): static
+    {
+        if (!$this->originOfficeDispatches->contains($originOfficeDispatch)) {
+            $this->originOfficeDispatches->add($originOfficeDispatch);
+            $originOfficeDispatch->setOriginOffice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOriginOfficeDispatch(Dispatch $originOfficeDispatch): static
+    {
+        if ($this->originOfficeDispatches->removeElement($originOfficeDispatch)) {
+            // set the owning side to null (unless already changed)
+            if ($originOfficeDispatch->getOriginOffice() === $this) {
+                $originOfficeDispatch->setOriginOffice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dispatch>
+     */
+    public function getDestinationOfficeDispatches(): Collection
+    {
+        return $this->destinationOfficeDispatches;
+    }
+
+    public function addDestinationOfficeDispatch(Dispatch $destinationOfficeDispatch): static
+    {
+        if (!$this->destinationOfficeDispatches->contains($destinationOfficeDispatch)) {
+            $this->destinationOfficeDispatches->add($destinationOfficeDispatch);
+            $destinationOfficeDispatch->setDestinationOffice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDestinationOfficeDispatch(Dispatch $destinationOfficeDispatch): static
+    {
+        if ($this->destinationOfficeDispatches->removeElement($destinationOfficeDispatch)) {
+            // set the owning side to null (unless already changed)
+            if ($destinationOfficeDispatch->getDestinationOffice() === $this) {
+                $destinationOfficeDispatch->setDestinationOffice(null);
             }
         }
 

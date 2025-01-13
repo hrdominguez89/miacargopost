@@ -144,11 +144,15 @@ class S10Code
     #[ORM\OneToMany(mappedBy: 's10code', targetEntity: CategoryItemS10code::class)]
     private Collection $categoryItemS10codes;
 
+    #[ORM\OneToMany(mappedBy: 's10Code', targetEntity: BagsS10Code::class)]
+    private Collection $bagsS10Codes;
+
     public function __construct()
     {
         $this->itemDetails = new ArrayCollection();
         $this->categoryItemS10codes = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->bagsS10Codes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -685,6 +689,36 @@ class S10Code
     public function setCategoryDocuentNumber(?string $categoryDocuentNumber): static
     {
         $this->categoryDocuentNumber = $categoryDocuentNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BagsS10Code>
+     */
+    public function getBagsS10Codes(): Collection
+    {
+        return $this->bagsS10Codes;
+    }
+
+    public function addBagsS10Code(BagsS10Code $bagsS10Code): static
+    {
+        if (!$this->bagsS10Codes->contains($bagsS10Code)) {
+            $this->bagsS10Codes->add($bagsS10Code);
+            $bagsS10Code->setS10Code($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBagsS10Code(BagsS10Code $bagsS10Code): static
+    {
+        if ($this->bagsS10Codes->removeElement($bagsS10Code)) {
+            // set the owning side to null (unless already changed)
+            if ($bagsS10Code->getS10Code() === $this) {
+                $bagsS10Code->setS10Code(null);
+            }
+        }
 
         return $this;
     }
