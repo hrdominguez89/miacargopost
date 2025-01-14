@@ -54,11 +54,15 @@ class Dispatch
     #[ORM\Column(type: Types::TEXT)]
     private ?string $itinerary = null;
 
+    #[ORM\Column(nullable: false)]
+    private ?float $weight = null;
+
     public function __construct()
     {
         $this->bags = new ArrayCollection();
         $this->createdAt =  new \DateTime();
         $this->updatedAt =  new \DateTime();
+        $this->weight = 0;
     }
 
     public function getId(): ?int
@@ -212,6 +216,18 @@ class Dispatch
     public function setItinerary(string $itinerary): static
     {
         $this->itinerary = $itinerary;
+
+        return $this;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(?float $weight): static
+    {
+        $this->weight = $weight;
 
         return $this;
     }

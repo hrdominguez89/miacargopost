@@ -26,7 +26,7 @@
 							<span id="all-data">Datos cargados correctamente</span>
 						</h4>
 						<div id="btn-datatable-dt-buttons" class="float-end">
-							<a href="{{ path('app_secure_new_dispatch') }}"  class="btn btn-primary btn-label waves-effect waves-light me-1">
+							<a href="{{ path('app_secure_new_dispatch') }}" class="btn btn-primary btn-label waves-effect waves-light me-1">
 								<i class="ri-add-line label-icon align-middle fs-16 me-2"></i>
 								Crear despacho
 							</a>
@@ -87,7 +87,7 @@
 										<th>
 											Cód. de despacho
 										</th>
-										<th>
+										<th class="text-center">
 											Acciones
 										</th>
 									</tr>
@@ -111,8 +111,12 @@
 											<td>
 												{{dispatch.dispatchCode}}
 											</td>
-											<td class="text-center">{# <a target="_blank" href="{{ path('app_pdf_cn22', { 'dispatchcode_id':dispatch.id}) }}" class="btn btn-primary">Ver CN22</a> #}
-												{# <a target="_blank" href="{{ path('app_pdf_cn23', { 'dispatchcode_id':dispatch.id}) }}" class="btn btn-primary">Ver CN23</a> #}
+											<td class="text-center">
+												{# {% if dispatch.statusDispatch.id == 1 %} #}
+												<a href=" {{ path('app_secure_new_bags',{'dispatch_id':dispatch.id}) }} " class="text-warning text-center" title="Cargar envases">
+													<i class="ri-luggage-cart-fill"  style="font-size: 20px;"></i>
+												</a>
+												{# {% endif %} #}
 											</td>
 										</tr>
 

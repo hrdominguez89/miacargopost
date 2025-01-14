@@ -1,0 +1,421 @@
+{% extends 'partials/main.html.twig' %}
+
+{% block stylesheets %}
+
+	{{ parent() }}
+
+	<!-- jsvectormap css -->
+	<link
+	href="{{ asset('libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css"/>
+
+	<!--Swiper slider css-->
+	<link href="{{ asset('libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css"/>
+
+{% endblock %}
+
+{% block content %}
+<!-- Modal para cerrar envase -->
+<div class="modal fade" id="cerrarEnvaseModal" tabindex="-1" aria-labelledby="cerrarEnvaseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="cerrarEnvaseModalLabel">Cerrar envase</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Está por cerrar el envase, ¿Está seguro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <form method="POST">
+          <input type="hidden" name="_token" value="{{ csrf_token('cerrar_envase') }}">
+          <input type="submit" value="Si, cerrar envase" name="cerrarEnvase" class="btn btn-danger"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para cerrar despacho -->
+<div class="modal fade" id="cerrarDespachoModal" tabindex="-1" aria-labelledby="cerrarDespachoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="cerrarDespachoModalLabel">Cerrar despacho</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Está por cerrar el despacho, ¿Está seguro?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <form method="POST">
+          <input type="hidden" name="_token" value="{{ csrf_token('cerrar_despacho') }}">
+          <input type="submit" value="Si, cerrar despacho" name="cerrarDespacho" class="btn btn-danger"/>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<div class="container-fluid">
+
+			<div class="row">
+
+				<div class="col-lg-6">
+					<div class="card card-height-100" style="margin-bottom: 0!important;">
+						<div class="card-header bg-light" style="display: block">
+							<div class="card-title flex-grow-1 mb-0">
+								<h4 class="card-title mb-0 flex-grow-1">Nro de envase
+									{{ '%03d'|format(bag.numberBag) }}</h4>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row g-3">
+								<div class="col-12">
+									<div class="mb-3">
+										<h5>Cód. S10</h5>
+									</div>
+								</div>
+							</div>
+							<div class="row g-3">
+								<div class="col-8 text-center">
+									<div class="mb-3">
+										<input type="text" id="s10codeInput" name="bag[s10codeInput]" placeholder="Escanee o tipee el código S10" class="form-control">
+                                        <input type="hidden" id="bagIdInputHidden" name="bag[bagIdInputHidden]" value="{{bag.id}}">
+                                    </div>
+                                    <div class="mb-3">
+                                    <div class="text-danger" id="errorS10Code"></div>
+                                    </div>
+								</div>
+								<div class="col-4 text-center">
+									<div class="mb-3">
+										<button id="agregarAlEnvaseButton" class="btn btn-primary btn-label waves-effect waves-light me-1">
+											<i class="ri-add-line label-icon align-middle fs-16 me-2"></i>
+											Agregar al envase
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card-body py-0">
+							<div class="row row-cols-md-3 row-cols-1">
+								<div class="col col-lg border-end border-bottom">
+									<div class="py-4 px-3">
+										<h5 class="text-muted text-uppercase fs-13">Códigos S10 Cargados
+											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
+										</h5>
+										<div class="d-flex align-items-center">
+											<div class="flex-shrink-0">
+												<i class="ri-inbox-archive-line display-6 text-muted"></i>
+											</div>
+											<div class="flex-grow-1 ms-3">
+												<h4 class="mb-0">
+													<span id="contadorCodigoS10Cargado">{{bag.s10Codes|length}}</span>
+												</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end col -->
+								<div class="col col-lg border-end border-bottom">
+									<div class="mt-3 mt-lg-0 py-4 px-3">
+										<h5 class="text-muted text-uppercase fs-13">Peso máximo por envase
+											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
+										</h5>
+										<div class="d-flex align-items-center">
+											<div class="flex-shrink-0">
+												<i class="ri-luggage-cart-line display-6 text-muted"></i>
+											</div>
+											<div class="flex-grow-1 ms-3">
+												<h4 class="mb-0">
+													<span>{{'25'|number_format(3, ',', '.')}}</span>
+													Kg
+												</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end col -->
+								<div class="col col-lg border-bottom">
+									<div class="mt-3 mt-lg-0 py-4 px-3">
+										<h5 class="text-muted text-uppercase fs-13">Peso actual
+											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
+										</h5>
+										<div class="d-flex align-items-center">
+											<div class="flex-shrink-0">
+												<i class="ri-luggage-cart-fill display-6 text-muted"></i>
+											</div>
+											<div class="flex-grow-1 ms-3">
+												<h4 class="mb-0">
+													<span id="pesoActualEnvase">{{bag.weight|number_format(3, ',', '.')}}</span>
+													Kg
+												</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end col -->
+							</div>
+							<!-- end row -->
+							<div class="row mt-3">
+								<div class="col-12">
+									<h5>Códigos agregados al envase</h5>
+								</div>
+								<div class="col-12">
+									<table id="tablaCodigosS10" class="table table-hover table-bordered table-stripped">
+										<thead>
+											<tr>
+												<th>
+													Cód S10
+												</th>
+
+												<th>
+													Peso
+												</th>
+
+												<th class="text-center">
+													Acciones
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for s10code in bag.s10codes %}
+												<tr>
+													<td>{{s10code.getFormattedNumbercode}}</td>
+
+													<td>{{ s10code.totalGrossWeight|number_format(3, ',', '.') }} Kg</td>
+
+													<td></td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<a href="{{ path('app_secure_dispatch_index',{'status_dispatch':'OPENED'}) }}" class="btn btn-outline-dark btn-label waves-effect waves-light me-1">
+								<i class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Volver</a>
+							<button type="button" class="btn btn-primary ms-5 waves-effect waves-light float-end" data-bs-toggle="modal" data-bs-target="#cerrarEnvaseModal">Cerrar envase</button>
+							<button type="button" class="btn btn-danger me-5 waves-effect waves-light float-end" data-bs-toggle="modal" data-bs-target="#cerrarDespachoModal">Cerrar despacho</button>
+						</div>
+
+					</div>
+				</div>
+				<!--end col-->
+
+				<div class="col-lg-6">
+					<div class="card" style="margin-bottom: 0!important;">
+						<div class="card-header bg-light">
+							<h4 class="card-title mb-0 flex-grow-1">Despacho Nro
+								{{ dispatch.dispatchCode }}
+							</h4>
+						</div>
+						<div class="card-body py-0">
+							<div class="row row-cols-md-3 row-cols-1">
+								<div class="col col-lg border-end border-bottom">
+									<div class="py-4 px-3">
+										<h5 class="text-muted text-uppercase fs-13">Envases
+											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
+										</h5>
+										<div class="d-flex align-items-center">
+											<div class="flex-shrink-0">
+												<i class="ri-inbox-archive-line display-6 text-muted"></i>
+											</div>
+											<div class="flex-grow-1 ms-3">
+												<h2 class="mb-0">
+													<span class="counter-value" data-target="{{dispatch.bags|length}}">{{dispatch.bags|length}}</span>
+												</h2>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end col -->
+								<div class="col col-lg border-end border-bottom">
+									<div class="mt-3 mt-lg-0 py-4 px-3">
+										<h5 class="text-muted text-uppercase fs-13">Peso máximo
+											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
+										</h5>
+										<div class="d-flex align-items-center">
+											<div class="flex-shrink-0">
+												<i class="ri-luggage-cart-line display-6 text-muted"></i>
+											</div>
+											<div class="flex-grow-1 ms-3">
+												<h4 class="mb-0">
+													<span>{{'3000'|number_format(3, ',', '.')}}</span>
+													Kg
+												</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end col -->
+								<div class="col col-lg border-bottom">
+									<div class="mt-3 mt-lg-0 py-4 px-3">
+										<h5 class="text-muted text-uppercase fs-13">Peso actual
+											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
+										</h5>
+										<div class="d-flex align-items-center">
+											<div class="flex-shrink-0">
+												<i class="ri-luggage-cart-fill display-6 text-muted"></i>
+											</div>
+											<div class="flex-grow-1 ms-3">
+												<h4 class="mb-0">
+													<span id="pesoActualDespacho">{{dispatch.weight|number_format(3, ',', '.')}}</span>
+													Kg
+												</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end col -->
+							</div>
+                            <div class="row row-cols-md-3 row-cols-1">
+								<div class="col col-lg border-end border-bottom">
+									<div class="py-4 px-3">
+										<h5 class="text-muted text-center text-uppercase fs-13">Itinerario
+											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
+										</h5>
+										<div class="d-flex text-center align-items-center">
+											<div class="flex-grow-1">
+												<i class="ri-flight-takeoff-line display-6 text-muted"></i>
+											</div>
+											<div class="flex-grow-1 ms-3">
+												<h2 class="mb-0">
+													<span>{{ dispatch.itinerary|replace({',': '<br>'})|raw }}</span>
+												</h2>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end col -->
+							</div>
+							<div class="row mt-3">
+								<div class="col-12">
+									<h5>Envases cargados al despacho</h5>
+								</div>
+								<div class="col-12">
+									<table class="table table-hover table-bordered table-stripped">
+										<thead>
+											<tr>
+												<th>
+													Cód Envase
+												</th>
+                                                <th>
+													Estado
+												</th>
+												<th>
+													Peso total envase
+												</th>
+
+												<th class="text-center">
+													Acciones
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for bag in bags %}
+												<tr>
+                                                {% if bag.status.id != 1 %}
+													<td>{{dispatch.dispatchCode ~ '%03d'|format(bag.numberBag) ~ (bag.isFinalBag ? 1:0) ~ (bag.isCertified ? 1:0) ~ '%03d'|format(bag.weight|round ) }}0</td>
+                                                {% else %}
+													<td>PENDIENTE HASTA QUE SE CIERRE EL ENVASE</td>
+                                                {% endif %}
+													<td>{{ bag.status.id == 1? 'Abierto':'Cerrado'}}</td>
+
+													<td {{ bag.status.id == 1? 'id="pesoActualEnvaseDespacho"':''}} >{{ bag.weight|number_format(3, ',', '.') }} Kg</td>
+
+													<td></td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- end row -->
+						</div>
+						<!-- end card body -->
+					</div>
+					<!-- end card -->
+				</div>
+				<!-- end col -->
+
+			</div>
+			<!--end row-->
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+	{{ parent() }}
+
+	<!-- apexcharts -->
+	<script src="{{ asset('libs/apexcharts/apexcharts.min.js') }}"></script>
+
+	<!-- Dashboard init -->
+	<script src="{{ asset('js/pages/dashboard-crm.init.js') }}"></script>
+
+    <script>
+        $(document).ready(function () {
+            listenAgregarAlEnvase();
+        });
+        const listenAgregarAlEnvase = ()=>{
+            $('#agregarAlEnvaseButton').on('click', function () {
+                let s10Code = $('#s10codeInput').val();
+                let bagId = $('#bagIdInputHidden').val();
+
+                if (s10Code) {
+                    fetch('/secure/upu/search', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            s10Code: s10Code,
+                            bagId: bagId
+                        }),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            // Si el servidor devuelve un error (código de estado no 2xx)
+                            return response.json().then(err => {
+                                throw new Error(err.message || 'Error desconocido');
+                            });
+                        }
+                        return response.json(); // Procesa la respuesta como JSON si es correcta
+                    })
+                    .then(data => {
+                        $('#errorS10Code').empty();
+                        $('#errorS10Code').hide();
+                        $('#pesoActualEnvase').html(data.bagWeight.toFixed(3).replace('.', ','));
+                        $('#pesoActualEnvaseDespacho').html(data.bagWeight.toFixed(3).replace('.', ',') + ' Kg');
+                        $('#pesoActualDespacho').html(data.dispatchWeight.toFixed(3).replace('.', ','));
+                        $('#contadorCodigoS10Cargado').html(parseInt($('#contadorCodigoS10Cargado').html())+1);
+
+                        const newRow = `
+                            <tr>
+                                <td>${s10Code}</td>
+                                <td>${data.s10Weight.toFixed(3).replace('.', ',')} Kg</td>
+                                <td class="text-center">
+                                </td>
+                            </tr>
+                        `;
+                        $('#tablaCodigosS10 tbody').append(newRow);
+
+                        // Limpieza de campos
+                        $('#s10codeInput').val('');
+
+                    })
+                    .catch(error => {
+                        $('#errorS10Code').empty();
+                        $('#errorS10Code').html(error.message);
+                        $('#errorS10Code').show();
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock %}

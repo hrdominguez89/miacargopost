@@ -6,9 +6,11 @@ use App\Entity\CategoryItemS10code;
 use App\Entity\ItemDetail;
 use App\Entity\S10Code;
 use App\Form\S10CodeType;
+use App\Repository\BagsRepository;
 use App\Repository\CategoryItemRepository;
 use App\Repository\PostalServiceRepository;
 use App\Repository\S10CodeRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -167,5 +169,95 @@ class UpuController extends AbstractController
         // Persistir los cambios
         $em->persist($s10Code);
         $em->flush();
+    }
+
+    #[Route('/search', name: 'app_secure_search_s10_code', methods: ['POST'])]
+    public function search(Request $request, S10CodeRepository $s10CodeRepository, BagsRepository $bagsRepository, EntityManagerInterface $em): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $s10Code = $data['s10Code'] ?? null;
+        $bagId = $data['bagId'] ?? null;
+
+        if (!($s10Code && $bagId)) {
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 's10Code y bagId son requeridos.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $s10 = $s10CodeRepository->findByS10Code(strtoupper($s10Code));
+        $bag = $bagsRepository->find($bagId);
+
+        if (!$s10) {
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'El código s10 no se encuentra.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        if (!$bag) {
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'El envase id indicado no se encuentra.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if($s10->getBag()){
+
+            if($s10->getBag()->getId() == $bag->getId()){
+                return new JsonResponse([
+                    'status_code' => Response::HTTP_BAD_REQUEST,
+                    'message' => 'El código s10 indicado ya se encuentra agregado al envase.',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'No se puede agregar el código s10 indicado porque ya se encuentra agregado a otro envase.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if($s10->getToCountry()->getIso2() != substr($bag->getDispatch()->getDispatchCode(), 6, 2)){
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'El código s10 indicado no es compatible con el destino de este despacho.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if($s10->getServiceCode() != substr($bag->getDispatch()->getDispatchCode(), 13, 2)){
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'El código s10 indicado no es compatible con la subclase de este despacho.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (($bag->getWeight() + $s10->getTotalGrossWeight()) > 25) {
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'No se puede agregar el código s10 debido a que el código s10 supera el peso máximo permitido por envase.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (($bag->getDispatch()->getWeight() + $bag->getWeight() + $s10->getTotalGrossWeight()) > 3000) {
+            return new JsonResponse([
+                'status_code' => Response::HTTP_BAD_REQUEST,
+                'message' => 'No se puede agregar el código s10 debido a que el envase supera el peso máximo permitido por despacho.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        //SI TODO LO DE ARRIBA DIO BIEN, SE PROCEDE A PERSISTIR LA INFO
+        $s10->setBag($bag);
+        $em->persist($s10);
+        $em->refresh($bag);
+        $bag->setWeight($bag->getWeight() + $s10->getTotalGrossWeight());
+        $bag->getDispatch()->setWeight($bag->getDispatch()->getWeight() + $s10->getTotalGrossWeight());
+        $em->persist($bag);
+        $em->flush();
+
+        return new JsonResponse([
+            'status_code' => Response::HTTP_OK,
+            'bagWeight' => $bag->getWeight(),
+            's10Weight' => $s10->getTotalGrossWeight(),
+            'dispatchWeight' => $bag->getDispatch()->getWeight(),
+        ], Response::HTTP_OK);
     }
 }

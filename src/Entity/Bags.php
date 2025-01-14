@@ -30,7 +30,7 @@ class Bags
     private ?bool $isCertified = null;
 
     #[ORM\Column]
-    private ?int $weight = null;
+    private ?float $weight = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -42,12 +42,14 @@ class Bags
     #[ORM\JoinColumn(nullable: false)]
     private ?StatusBag $status = null;
 
-    #[ORM\OneToMany(mappedBy: 'bag', targetEntity: BagsS10Code::class)]
-    private Collection $bagsS10Codes;
+    #[ORM\OneToMany(mappedBy: 'bag', targetEntity: S10Code::class)]
+    private Collection $s10Codes;
 
     public function __construct()
     {
-        $this->bagsS10Codes = new ArrayCollection();
+        $this->s10Codes = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -103,12 +105,12 @@ class Bags
         return $this;
     }
 
-    public function getWeight(): ?int
+    public function getWeight(): ?float
     {
         return $this->weight;
     }
 
-    public function setWeight(int $weight): static
+    public function setWeight(float $weight): static
     {
         $this->weight = $weight;
 
@@ -152,29 +154,29 @@ class Bags
     }
 
     /**
-     * @return Collection<int, BagsS10Code>
+     * @return Collection<int, S10Code>
      */
-    public function getBagsS10Codes(): Collection
+    public function getS10Codes(): Collection
     {
-        return $this->bagsS10Codes;
+        return $this->s10Codes;
     }
 
-    public function addBagsS10Code(BagsS10Code $bagsS10Code): static
+    public function addS10Code(S10Code $s10Code): static
     {
-        if (!$this->bagsS10Codes->contains($bagsS10Code)) {
-            $this->bagsS10Codes->add($bagsS10Code);
-            $bagsS10Code->setBag($this);
+        if (!$this->s10Codes->contains($s10Code)) {
+            $this->s10Codes->add($s10Code);
+            $s10Code->setBag($this);
         }
 
         return $this;
     }
 
-    public function removeBagsS10Code(BagsS10Code $bagsS10Code): static
+    public function removeS10Code(S10Code $s10Code): static
     {
-        if ($this->bagsS10Codes->removeElement($bagsS10Code)) {
+        if ($this->s10Codes->removeElement($s10Code)) {
             // set the owning side to null (unless already changed)
-            if ($bagsS10Code->getBag() === $this) {
-                $bagsS10Code->setBag(null);
+            if ($s10Code->getBag() === $this) {
+                $s10Code->setBag(null);
             }
         }
 
