@@ -28,6 +28,7 @@ class PdfController extends AbstractController
         if ($data['s10code']) {
             if (!$data['s10code']->getNumbercode()) {
                 $data['s10code']->setNumbercode($this->generateCode($s10code_id, $s10CodeRepository));
+                $data['s10code']->setCode($data['s10code']->getFormattedNumbercode());
                 $em->persist($data['s10code']);
                 $em->flush($data['s10code']);
             }
@@ -110,6 +111,7 @@ class PdfController extends AbstractController
         if ($data['s10code']) {
             if (!$data['s10code']->getNumbercode()) {
                 $data['s10code']->setNumbercode($this->generateCode($s10code_id, $s10CodeRepository));
+                $data['s10code']->setCode($data['s10code']->getFormattedNumbercode());
                 $em->persist($data['s10code']);
                 $em->flush($data['s10code']);
             }

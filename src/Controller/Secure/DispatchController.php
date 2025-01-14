@@ -84,6 +84,7 @@ class DispatchController extends AbstractController
             $data['bag'] = $bagsRepository->findOneBy(['dispatch' => $data['dispatch'], 'status' => $statusBag], ['id' => 'DESC']);
             if ($data['bag']->getS10Codes()[0]) {
                 $data['bag']->setStatus($statusBagRepository->find(ConstantsStatusBag::CLOSED));
+                $data['bag']->setBagCode($data['bag']->generateBagCode());
                 $em->persist($data['bag']);
                 $em->flush();
                 $this->addFlash('success', 'El envase se ha cerrado correctamente.');
@@ -96,6 +97,7 @@ class DispatchController extends AbstractController
             $data['bag'] = $bagsRepository->findOneBy(['dispatch' => $data['dispatch'], 'status' => $statusBag], ['id' => 'DESC']);
             if ($data['bag']->getS10Codes()[0]) {
                 $data['bag']->setIsFinalBag(true);
+                $data['bag']->setBagCode($data['bag']->generateBagCode());
                 $data['bag']->setStatus($statusBagRepository->find(ConstantsStatusBag::CLOSED));
                 $em->persist($data['bag']);
                 $data['dispatch']->setStatusDispatch($statusDispatchRepository->find(ConstantsStatusDispatch::CLOSED));
@@ -107,6 +109,7 @@ class DispatchController extends AbstractController
                 $statusBagClosed = $statusBagRepository->find(ConstantsStatusBag::CLOSED);
                 $data['bag'] = $bagsRepository->findOneBy(['dispatch' => $data['dispatch'], 'status' => $statusBagClosed], ['id' => 'DESC']);
                 $data['bag']->setIsFinalBag(true);
+                $data['bag']->setBagCode($data['bag']->generateBagCode());
                 $em->persist($data['bag']);
                 $data['dispatch']->setStatusDispatch($statusDispatchRepository->find(ConstantsStatusDispatch::CLOSED));
                 $em->persist($data['dispatch']);

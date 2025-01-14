@@ -147,6 +147,9 @@ class S10Code
     #[ORM\ManyToOne(inversedBy: 's10Codes')]
     private ?Bags $bag = null;
 
+    #[ORM\Column(length: 13, nullable: true)]
+    private ?string $code = null;
+
     public function __construct()
     {
         $this->itemDetails = new ArrayCollection();
@@ -700,6 +703,18 @@ class S10Code
     public function setBag(?Bags $bag): static
     {
         $this->bag = $bag;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(?string $code): static
+    {
+        $this->code = $code;
 
         return $this;
     }

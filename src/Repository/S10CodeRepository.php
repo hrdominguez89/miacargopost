@@ -44,8 +44,8 @@ class S10CodeRepository extends ServiceEntityRepository
 
     public function findByS10Code($s10Code){
         $qb = $this->createQueryBuilder('s10')
-            ->where('s10.barcodeImage = :s10Code')
-            ->setParameter('s10Code', '/barcodes/s10/'.$s10Code.'.png');
+            ->where('s10.code = :s10Code')
+            ->setParameter('s10Code', $s10Code);
         return $qb->getQuery()->getOneOrNullResult();
     }
 

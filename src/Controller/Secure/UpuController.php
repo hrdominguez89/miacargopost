@@ -66,19 +66,22 @@ class UpuController extends AbstractController
             $data['s10Code']->setTotalValue($totalValue);
             $data['s10Code']->setTotalGrossWeight($totalWeight);
 
-            foreach ($request->get('s10_code')['categoryItem'] as $categoryItem) {
-                $categoryItemS10code = new CategoryItemS10code();
-                $data['s10Code']->addCategoryItemS10code($categoryItemS10code->setCategoryItem($categoryItemRepository->find($categoryItem)));
-                $em->persist($categoryItemS10code);
+            if(isset($request->get('s10_code')['categoryItem'])){
+                foreach ($request->get('s10_code')['categoryItem'] as $categoryItem) {
+                    $categoryItemS10code = new CategoryItemS10code();
+                    $data['s10Code']->addCategoryItemS10code($categoryItemS10code->setCategoryItem($categoryItemRepository->find($categoryItem)));
+                    $em->persist($categoryItemS10code);
+                }
             }
-
             $em->persist($data['s10Code']);
             $em->flush();
 
+            $data['s10Code']->setCode($data['s10Code']->getFormattedNumbercode());
             $data['s10Code']->setNumbercode($this->generateCode($data['s10Code']->getId(), $s10CodeRepository));
 
             $this->generateBarcodeImage($data['s10Code'], $em);
 
+            
             $em->persist($data['s10Code']);
             $em->flush();
 
