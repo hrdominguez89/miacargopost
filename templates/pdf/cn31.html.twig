@@ -13,7 +13,10 @@
 	{# Header #}
 	<div>
 		<p style="display: inline-block; padding: 0; margin:0 0 2px 0;">
-			Identificador del despacho</p>
+			Identificador del despacho 
+		</p>
+		
+			
 		<h1 style="display: inline-block; font-size:18px; padding: 0; margin:0 0 0 150px;">
 			HOJA DE AVISO</h1>
 		<h1 style="display: inline-block; font-size:18px; padding: 0; margin:0 0 0 260px;">
@@ -21,8 +24,14 @@
 	</div>
 	{# Bar Code #}
 	<div style="vertical-align:top;">
-		<img src="{{ app.request.schemeAndHttpHost ~ asset(s10code.barcodeImage) }}" alt="Logo EMS"
-			style="width: 7.5cm; height: 8mm; ">
+		{# <img src="{{ app.request.schemeAndHttpHost ~ asset(s10code.barcodeImage) }}" alt="Logo EMS"
+			style="width: 7.5cm; height: 8mm; "> #}
+			<p style="display: inline-block; padding: 0; margin:0 0 2px 0;">
+			<strong>
+
+				{{ dispatch.dispatchCode}}
+			</strong>
+			</p>
 	</div>
 	{#bulletin #}
 	<div style="padding: 0; margin:0;">
@@ -40,14 +49,19 @@
 			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;" rowspan="2">Operadores
 			</td>
 			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;">Expedidor</td>
-			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;" colspan="5"></td>
+			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;" colspan="5">
+				{{ dispatch.originOffice.impcOrganisationCode }} - {{ dispatch.originOffice.organisationFullName}}
+
+			</td>
 			<td style="padding-left: 5px; vertical-align:top;" rowspan="2">Número anterior</td>
 		</tr>
 		<tr>
 			<td
 				style="border-top: 1px solid #000; border-right:1px solid #000; vertical-align:middle; padding-left: 5px;">
 				De destino</td>
-			<td style="border-top: 1px solid #000;" colspan="5"></td>
+			<td style="border-top: 1px solid #000;" colspan="5">
+				{{ dispatch.destinationOffice.impcOrganisationCode }} - {{ dispatch.destinationOffice.organisationFullName}}
+			</td>
 		</tr>
 		<tr>
 			<td style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px;"
@@ -69,12 +83,22 @@
 				rowspan="2">Fecha</td>
 		</tr>
 		<tr>
-			<td style="border-top:1px solid #000; border-right:1px solid #000;" colspan="2"></td>
+			<td style="border-top:1px solid #000; border-right:1px solid #000; text-align: center; font-size: 14px;" colspan="2">
+			<strong>	{{ dispatch.originOffice.impcCodeFullName }}<br>
+				{{ dispatch.originOffice.impcCode }}</strong>
+			</td>
+			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000; text-align: center; font-size:14px;">
+			<strong>	{{ dispatch.destinationOffice.impcCodeFullName }}<br>
+				{{ dispatch.destinationOffice.impcCode }}</strong>
+			</td>
 			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000;"></td>
 			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000;"></td>
 			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000;"></td>
-			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000;"></td>
-			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000;"></td>
+			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000; text-align: center;">
+				<strong>
+					{{ dispatch.numberDispatch }}
+				</strong>
+			</td>
 		</tr>
 		<tr>
 			<td style="height:35px; border-top:1px solid #000; vertical-align:top; font-size:13px; padding-left:5px;"
@@ -310,7 +334,12 @@
 				style="border-right: 1px solid #000; border-bottom: 1px solid #000; font-size:13px; padding-left:5px; vertical-align:middle; height:30px;">
 				Peso total del despacho</td>
 			<td style="border-right: 1px solid #000; border-bottom: 1px solid #000; font-size:13px; padding-left:5px; vertical-align:middle;"
-				colspan="5"></td>
+				colspan="5">
+				<strong>
+					{{dispatch.weight}} 
+
+				</strong>
+			</td>
 		</tr>
 	</table>
 	{# 3. Envíos identifi cados #}

@@ -64,17 +64,19 @@
 
 				<div class="col-12">
 					<div class="card" style="margin-bottom: 0!important;">
-						<div class="card-header bg-light">
-							<h4 class="card-title mb-0 flex-grow-1">Despacho Nro
+						<div class="d-flex align-items-center card-header bg-light">
+							<h4 class="card-title mb-0 ">Despacho Nro
 								{{ dispatch.dispatchCode }}
 							</h4>
+							<a target="_blank" class="btn btn-primary align-self-start ms-2"
+               				 href="{{ path('app_pdf_cn31', {'dispatch_id':dispatch.id}) }}">Ver CN31</a>
+								{# {{ path('app_pdf_cn31', {''}) }} #}
 						</div>
 						<div class="card-body py-0">
 							<div class="row row-cols-md-3 row-cols-1">
 								<div class="col col-lg border-end border-bottom">
 									<div class="py-4 px-3">
 										<h5 class="text-muted text-uppercase fs-13">Envases
-											<i class="ri-arrow-up-circle-line text-primary fs-18 float-end align-middle"></i>
 										</h5>
 										<div class="d-flex align-items-center">
 											<div class="flex-shrink-0">
@@ -183,7 +185,8 @@
 
 													<td {{ bag.status.id == 1? 'id="pesoActualEnvaseDespacho"':''}} >{{ bag.weight|number_format(3, ',', '.') }} Kg</td>
 
-													<td></td>
+													<td class="d-flex align-items-center justify-content-center"><a target="_blank" href="{{ path('app_pdf_cn35', { 'bag_id':bag.id}) }}"
+														class="btn btn-primary">Ver CN35</a></td>
 												</tr>
 											{% endfor %}
 										</tbody>

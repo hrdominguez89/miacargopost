@@ -5,6 +5,8 @@ namespace App\Controller\Secure;
 use App\Constants\CategoyItems;
 use App\Entity\S10Code;
 use App\Repository\S10CodeRepository;
+use App\Repository\DispatchRepository;
+use App\Repository\BagsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Snappy\Pdf;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -132,8 +134,8 @@ class PdfController extends AbstractController
        
         return new Response($pdfContent, 200, ['Content-Type' => 'application/pdf']);
     }
-    #[Route('/cn31/{s10code_id}', name: 'app_pdf_cn31')]
-    public function cn31($s10code_id, S10CodeRepository $s10CodeRepository, EntityManagerInterface $em): Response{
+    #[Route('/cn31/{dispatch_id}', name: 'app_pdf_cn31')]
+    public function cn31($dispatch_id, DispatchRepository $dispatchRepository, EntityManagerInterface $em): Response{
          // Ruta absoluta de la imagen en el servidor
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/images/logoems.png';
         $imagePathCode = $this->getParameter('kernel.project_dir') . '/public/images/code.png';
@@ -150,17 +152,17 @@ class PdfController extends AbstractController
             $base64ImageCode = null; // Manejo de errores si la imagen no se encuentra
         }
 
-        $data['s10code'] = $s10CodeRepository->find($s10code_id);
-        if ($data['s10code']) {
-            if (!$data['s10code']->getNumbercode()) {
-                $data['s10code']->setNumbercode($this->generateCode($s10code_id, $s10CodeRepository));
-                $em->persist($data['s10code']);
-                $em->flush($data['s10code']);
+         $data['dispatch'] = $dispatchRepository->find($dispatch_id);
+        /* if ($data['dispatch']) {
+            if (!$data['dispatch']->getNumbercode()) {
+                $data['dispatch']->setNumbercode($this->generateCode($dispatch_id, $dispatchRepository));
+                $em->persist($data['dispatch']);
+                $em->flush($data['dispatch']);
             }
-            $this->generateBarcodeImage($data['s10code'], $em);
+            $this->generateBarcodeImage($data['dispatch'], $em);
         } else {
             return $this->redirectToRoute('app_secure_upu');
-        }
+        } */
         
         $html = $this->renderView('pdf/cn31.html.twig', $data);        
         $options = [
@@ -216,8 +218,8 @@ class PdfController extends AbstractController
        
         return new Response($pdfContent, 200, ['Content-Type' => 'application/pdf']);
     }
-    #[Route('/cn35/{s10code_id}', name: 'app_pdf_cn35')]
-    public function cn35($s10code_id, S10CodeRepository $s10CodeRepository, EntityManagerInterface $em): Response{
+    #[Route('/cn35/{bag_id}', name: 'app_pdf_cn35')]
+    public function cn35($bag_id, BagsRepository $bagRepository, DispatchRepository $dispatchRepository, EntityManagerInterface $em): Response{
          // Ruta absoluta de la imagen en el servidor
         $imagePath = $this->getParameter('kernel.project_dir') . '/public/images/logoems.png';
         $imagePathCode = $this->getParameter('kernel.project_dir') . '/public/images/code.png';
@@ -234,19 +236,23 @@ class PdfController extends AbstractController
             $base64ImageCode = null; // Manejo de errores si la imagen no se encuentra
         }
 
-        $data['s10code'] = $s10CodeRepository->find($s10code_id);
-        if ($data['s10code']) {
-            if (!$data['s10code']->getNumbercode()) {
-                $data['s10code']->setNumbercode($this->generateCode($s10code_id, $s10CodeRepository));
-                $em->persist($data['s10code']);
-                $em->flush($data['s10code']);
+        $data['bag'] = $bagRepository->find($bag_id);
+        $data['dispatch'] = $data['bag']->getDispatch();
+       
+
+
+        /* if ($data['bag']) {
+            if (!$data['bag']->getNumbercode()) {
+                $data['bag']->setNumbercode($this->generateCode($bag_id, $bagRepository));
+                $em->persist($data['bag']);
+                $em->flush($data['bag']);
             }
-            $this->generateBarcodeImage($data['s10code'], $em);
+            $this->generateBarcodeImage($data['bag'], $em);
         } else {
             return $this->redirectToRoute('app_secure_upu');
-        }
+        } */
         
-        $html = $this->renderView('pdf/cn35.html.twig', $data);        
+        $html = $this->renderView('pdf/cn35.html.twig', $data );        
         $options = [
             'margin-top'=> '20mm',
             'margin-right' => '10mm',
