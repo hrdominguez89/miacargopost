@@ -156,6 +156,9 @@ class PdfController extends AbstractController
         }
 
          $data['dispatch'] = $dispatchRepository->find($dispatch_id);
+         if(!$data['dispatch']->getBarcodeImage()){
+            $this->generateBarcodeImage($data['dispatch'],'dispatches', $em);
+        }
         /* if ($data['dispatch']) {
             if (!$data['dispatch']->getNumbercode()) {
                 $data['dispatch']->setNumbercode($this->generateCode($dispatch_id, $dispatchRepository));
@@ -240,6 +243,9 @@ class PdfController extends AbstractController
         }
 
         $data['bag'] = $bagRepository->find($bag_id);
+        if(!$data['bag']->getBarcodeImage()){
+            $this->generateBarcodeImage($data['bag'],'bags', $em);
+        }
         $data['dispatch'] = $data['bag']->getDispatch();
        
 
