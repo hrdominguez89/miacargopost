@@ -166,8 +166,11 @@ class DispatchController extends AbstractController
 
     private function generateBarcodeImage($ObjetoEntidad,$path, EntityManagerInterface $em): void
     {
-        // Definir la ruta del archivo en la carpeta /public/barcodes/s10/
-        $codigo = $ObjetoEntidad->getFormattedNumbercode();
+        if($path == 'bags'){
+            $codigo = $ObjetoEntidad->generateBagCode();
+        }else{
+            $codigo = $ObjetoEntidad->getDispatchCode();
+        }
         $rutaArchivo = $this->getParameter('kernel.project_dir') . '/public/barcodes/'.$path.'/' . $codigo . '.png';
 
         // Generar código de barras con picqer/php-barcode-generator (Code128)

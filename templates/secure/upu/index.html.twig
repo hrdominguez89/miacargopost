@@ -350,6 +350,12 @@
                             Codigo S10
                         </th>
                         <th>
+                            Despacho
+                        </th>
+                        <th>
+                            Envase
+                        </th>
+                        <th>
                             Formularios aduana
                         </th>
                     </tr>
@@ -371,7 +377,15 @@
                             {{s10.toCountry.name}}
                         </td>
                         <td>
-                            {{s10.getFormattedNumbercode}}
+                            {{s10.code}}
+                        </td>
+                        
+                        <td>
+                            {{s10.bag ? s10.bag.dispatch.dispatchCode}}
+                        </td>
+                        
+                        <td>
+                            {{s10.bag ? s10.bag.bagCode}}
                         </td>
                         <td class="text-center">
                             <a target="_blank" href="{{ path('app_pdf_cn22', { 's10code_id':s10.id}) }}"
