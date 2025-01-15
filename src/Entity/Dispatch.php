@@ -57,6 +57,9 @@ class Dispatch
     #[ORM\Column(nullable: false)]
     private ?float $weight = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $barcodeImage = null;
+
     public function __construct()
     {
         $this->bags = new ArrayCollection();
@@ -228,6 +231,18 @@ class Dispatch
     public function setWeight(?float $weight): static
     {
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getBarcodeImage(): ?string
+    {
+        return $this->barcodeImage;
+    }
+
+    public function setBarcodeImage(?string $barcodeImage): static
+    {
+        $this->barcodeImage = $barcodeImage;
 
         return $this;
     }

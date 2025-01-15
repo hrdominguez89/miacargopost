@@ -48,6 +48,9 @@ class Bags
     #[ORM\Column(length: 29, nullable: true)]
     private ?string $bagCode = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $barcodeImage = null;
+
     public function __construct()
     {
         $this->s10Codes = new ArrayCollection();
@@ -202,5 +205,17 @@ class Bags
     {
         $code = $this->getDispatch()->getDispatchCode() . str_pad($this->getNumberBag(), 3, '0', STR_PAD_LEFT) . ($this->isFinalBag() ? '1' : '0') . ($this->isCertified() ? '1' : '0') . str_pad(round($this->getWeight()), 3, '0', STR_PAD_LEFT) . '0';
         return $code;
+    }
+
+    public function getBarcodeImage(): ?string
+    {
+        return $this->barcodeImage;
+    }
+
+    public function setBarcodeImage(?string $barcodeImage): static
+    {
+        $this->barcodeImage = $barcodeImage;
+
+        return $this;
     }
 }
