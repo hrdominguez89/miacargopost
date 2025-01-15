@@ -2,8 +2,6 @@
 
 namespace App\Controller\Secure;
 
-use App\Constants\CategoyItems;
-use App\Entity\S10Code;
 use App\Repository\S10CodeRepository;
 use App\Repository\DispatchRepository;
 use App\Repository\BagsRepository;
@@ -34,7 +32,7 @@ class PdfController extends AbstractController
                 $em->persist($data['s10code']);
                 $em->flush($data['s10code']);
             }
-            $this->generateBarcodeImage($data['s10code'], $em);
+            $this->generateBarcodeImage($data['s10code'],'s10', $em);
         } else {
             return $this->redirectToRoute('app_secure_upu');
         }
@@ -69,25 +67,30 @@ class PdfController extends AbstractController
         return $numbers . $digito_de_seguridad;
     }
 
-    private function generateBarcodeImage(S10Code $s10Code, EntityManagerInterface $em): void
+    private function generateBarcodeImage($ObjetoEntidad,$path, EntityManagerInterface $em): void
     {
-        // Definir la ruta del archivo en la carpeta /public/barcodes/s10/
-        $codigoS10 = $s10Code->getFormattedNumbercode();
-        $rutaArchivo = $this->getParameter('kernel.project_dir') . '/public/barcodes/s10/' . $codigoS10 . '.png';
+        if($path == 'bags'){
+            $codigo = $ObjetoEntidad->generateBagCode();
+        }else if ($path =='s10'){
+            $codigo = $ObjetoEntidad->getFormattedNumbercode();
+        }else{
+            $codigo = $ObjetoEntidad->getDispatchCode();
+        }
+        $rutaArchivo = $this->getParameter('kernel.project_dir') . '/public/barcodes/'.$path.'/' . $codigo . '.png';
 
         // Generar código de barras con picqer/php-barcode-generator (Code128)
         $generator = new BarcodeGeneratorPNG();
-        $codigoBarras = $generator->getBarcode($codigoS10, $generator::TYPE_CODE_128);
+        $codigoBarras = $generator->getBarcode($codigo, $generator::TYPE_CODE_128);
 
         // Guardar la imagen en la carpeta /public/barcodes/s10/
         file_put_contents($rutaArchivo, $codigoBarras);
 
-        // Actualizar la entidad S10Code para guardar la ruta de la imagen
-        $rutaRelativa = '/barcodes/s10/' . $codigoS10 . '.png';
-        $s10Code->setBarcodeImage($rutaRelativa);
+        // Actualizar la entidad ObjetoEntidad para guardar la ruta de la imagen
+        $rutaRelativa = '/barcodes/'.$path.'/' . $codigo . '.png';
+        $ObjetoEntidad->setBarcodeImage($rutaRelativa);
 
         // Persistir los cambios
-        $em->persist($s10Code);
+        $em->persist($ObjetoEntidad);
         $em->flush();
     }
 
@@ -117,7 +120,7 @@ class PdfController extends AbstractController
                 $em->persist($data['s10code']);
                 $em->flush($data['s10code']);
             }
-            $this->generateBarcodeImage($data['s10code'], $em);
+            $this->generateBarcodeImage($data['s10code'],'s10', $em);
         } else {
             return $this->redirectToRoute('app_secure_upu');
         }
@@ -201,7 +204,7 @@ class PdfController extends AbstractController
                 $em->persist($data['s10code']);
                 $em->flush($data['s10code']);
             }
-            $this->generateBarcodeImage($data['s10code'], $em);
+            $this->generateBarcodeImage($data['s10code'],'s10', $em);
         } else {
             return $this->redirectToRoute('app_secure_upu');
         }
