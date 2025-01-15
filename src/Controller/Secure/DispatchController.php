@@ -17,6 +17,7 @@ use App\Repository\RoutesRepository;
 use App\Repository\StatusBagRepository;
 use App\Repository\StatusDispatchRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,6 +55,7 @@ class DispatchController extends AbstractController
                 ->setDispatchCode($originOffice->getImpcCode() . $destinationOffice->getImpcCode() . 'A' . $postalServiceRange->getPrincipalCharacter() . $postalServiceRange->getSecondCharacterFrom() . substr(date('Y'), -1) . str_pad($request->get('dispatch')['numberDispatch'], 4, '0', STR_PAD_LEFT));
             $em->persist($data['dispatch']);
             $em->flush();
+            $this->generateBarcodeImage($data['dispatch'],'dispatches',$em);
             return $this->redirectToRoute('app_secure_dispatch_index', ['status_dispatch', 'OPENED']);
         }
         return $this->render('secure/dispatch/new_dispatch.html.twig', $data);
@@ -87,6 +89,7 @@ class DispatchController extends AbstractController
                 $data['bag']->setBagCode($data['bag']->generateBagCode());
                 $em->persist($data['bag']);
                 $em->flush();
+                $this->generateBarcodeImage($data['bag'],'bags',$em);
                 $this->addFlash('success', 'El envase se ha cerrado correctamente.');
                 return $this->redirectToRoute('app_secure_new_bags', ['dispatch_id' => $dispatch_id]);
             } else {
@@ -96,27 +99,21 @@ class DispatchController extends AbstractController
         } elseif ($request->request->has('cerrarDespacho')) {
             $data['bag'] = $bagsRepository->findOneBy(['dispatch' => $data['dispatch'], 'status' => $statusBag], ['id' => 'DESC']);
             if ($data['bag']->getS10Codes()[0]) {
-                $data['bag']->setIsFinalBag(true);
-                $data['bag']->setBagCode($data['bag']->generateBagCode());
                 $data['bag']->setStatus($statusBagRepository->find(ConstantsStatusBag::CLOSED));
-                $em->persist($data['bag']);
-                $data['dispatch']->setStatusDispatch($statusDispatchRepository->find(ConstantsStatusDispatch::CLOSED));
-                $em->persist($data['dispatch']);
-                $em->flush();
             } else {
                 $em->remove($data['bag']);
                 $em->flush();
                 $statusBagClosed = $statusBagRepository->find(ConstantsStatusBag::CLOSED);
                 $data['bag'] = $bagsRepository->findOneBy(['dispatch' => $data['dispatch'], 'status' => $statusBagClosed], ['id' => 'DESC']);
-                $data['bag']->setIsFinalBag(true);
-                $data['bag']->setBagCode($data['bag']->generateBagCode());
-                $em->persist($data['bag']);
-                $data['dispatch']->setStatusDispatch($statusDispatchRepository->find(ConstantsStatusDispatch::CLOSED));
-                $em->persist($data['dispatch']);
-                $em->flush();
-                $this->addFlash('success', ' se ha cerrado el despacho correctamente.');
-                return $this->redirectToRoute('app_secure_new_bags', ['dispatch_id' => $dispatch_id]);
+                
             }
+            $data['bag']->setIsFinalBag(true);
+            $data['bag']->setBagCode($data['bag']->generateBagCode());
+            $em->persist($data['bag']);
+            $data['dispatch']->setStatusDispatch($statusDispatchRepository->find(ConstantsStatusDispatch::CLOSED));
+            $em->persist($data['dispatch']);
+            $em->flush();
+            $this->generateBarcodeImage($data['bag'],'bags',$em);
             $this->addFlash('success', ' se ha cerrado el despacho correctamente.');
             return $this->redirectToRoute('app_secure_new_bags', ['dispatch_id' => $dispatch_id]);
         }
@@ -165,5 +162,27 @@ class DispatchController extends AbstractController
 
         $data['dispatches'] = $dispatchRepository->findBy(['statusDispatch' => $statusDispatch]);
         return $this->render('secure/dispatch/index.html.twig', $data);
+    }
+
+    private function generateBarcodeImage($ObjetoEntidad,$path, EntityManagerInterface $em): void
+    {
+        // Definir la ruta del archivo en la carpeta /public/barcodes/s10/
+        $codigo = $ObjetoEntidad->getFormattedNumbercode();
+        $rutaArchivo = $this->getParameter('kernel.project_dir') . '/public/barcodes/'.$path.'/' . $codigo . '.png';
+
+        // Generar código de barras con picqer/php-barcode-generator (Code128)
+        $generator = new BarcodeGeneratorPNG();
+        $codigoBarras = $generator->getBarcode($codigo, $generator::TYPE_CODE_128);
+
+        // Guardar la imagen en la carpeta /public/barcodes/s10/
+        file_put_contents($rutaArchivo, $codigoBarras);
+
+        // Actualizar la entidad ObjetoEntidad para guardar la ruta de la imagen
+        $rutaRelativa = '/barcodes/'.$path.'/' . $codigo . '.png';
+        $ObjetoEntidad->setBarcodeImage($rutaRelativa);
+
+        // Persistir los cambios
+        $em->persist($ObjetoEntidad);
+        $em->flush();
     }
 }
