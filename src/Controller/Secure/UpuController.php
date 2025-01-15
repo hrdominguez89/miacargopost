@@ -75,12 +75,13 @@ class UpuController extends AbstractController
             }
             $em->persist($data['s10Code']);
             $em->flush();
+            $em->refresh($data['s10Code']);
 
-            $data['s10Code']->setCode($data['s10Code']->getFormattedNumbercode());
             $data['s10Code']->setNumbercode($this->generateCode($data['s10Code']->getId(), $s10CodeRepository));
 
             $this->generateBarcodeImage($data['s10Code'], $em);
 
+            $data['s10Code']->setCode($data['s10Code']->getFormattedNumbercode());
             
             $em->persist($data['s10Code']);
             $em->flush();
