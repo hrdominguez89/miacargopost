@@ -247,7 +247,7 @@ class PdfController extends AbstractController
             $this->generateBarcodeImage($data['bag'],'bags', $em);
         }
         $data['dispatch'] = $data['bag']->getDispatch();
-       
+        
 
 
         /* if ($data['bag']) {

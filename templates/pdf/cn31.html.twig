@@ -24,19 +24,16 @@
 	</div>
 	{# Bar Code #}
 	<div style="vertical-align:top;">
-		{# <img src="{{ app.request.schemeAndHttpHost ~ asset(s10code.barcodeImage) }}" alt="Logo EMS"
-			style="width: 7.5cm; height: 8mm; "> #}
-			<p style="display: inline-block; padding: 0; margin:0 0 2px 0;">
+		<img src="{{ app.request.schemeAndHttpHost ~ asset(dispatch.barcodeImage) }}" alt="Logo EMS"
+			style="width: 7.5cm; height: 8mm; "><br>
+			<p style="display: inline-block; padding: 0; padding-left: 20px; margin:0 0 2px 0; text-align:center;">
 				<strong> {{ dispatch.dispatchCode|slice(0, 6) }} </strong>
 				<strong> {{ dispatch.dispatchCode|slice(6, 6) }} </strong>
 				<strong> {{ dispatch.dispatchCode|slice(12, 1) }} </strong>
 				<strong> {{ dispatch.dispatchCode|slice(13, 2) }} </strong>
 				<strong> {{ dispatch.dispatchCode|slice(15, 1) }} </strong>
 				<strong> {{ dispatch.dispatchCode|slice(16, 4) }} </strong>
-			<strong>
-				
-				{# {{ dispatch.dispatchCode}} #}
-			</strong>
+			
 			</p>
 	</div>
 	{#bulletin #}
@@ -55,7 +52,7 @@
 			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;" rowspan="2">Operadores
 			</td>
 			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;">Expedidor</td>
-			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;" colspan="5">
+			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000; font-weight:700;" colspan="5">
 				{{ dispatch.originOffice.impcOrganisationCode }} - {{ dispatch.originOffice.organisationFullName}}
 
 			</td>
@@ -65,7 +62,7 @@
 			<td
 				style="border-top: 1px solid #000; border-right:1px solid #000; vertical-align:middle; padding-left: 5px;">
 				De destino</td>
-			<td style="border-top: 1px solid #000;" colspan="5">
+			<td style="border-top: 1px solid #000; font-weight:700;" colspan="5">
 				{{ dispatch.destinationOffice.impcOrganisationCode }} - {{ dispatch.destinationOffice.organisationFullName}}
 			</td>
 		</tr>
@@ -109,7 +106,7 @@
 		</tr>
 	</table>
 	{# Cantidad de envases #}
-	<p style="font-weight: 800; padding:0 0 0 5px; margin:30px 0 0 0; font-size:16px; ">1. Cantidad de envases</p>
+	<p style="font-weight: 800; padding:0 0 0 5px; margin:10px 0 0 0; font-size:16px; ">1. Cantidad de envases</p>
 	<table style="border: 1px solid #000; width:100%; border-collapse: collapse;">
 		<tr>
 			<td style="border-right: 1px solid #000; font-size:13px; padding-left:5px; vertical-align:middle;">Etiquetas
@@ -218,7 +215,7 @@
 
 	</table>
 	{# 2. Gastos de tránsito y gastos terminales #}
-	<p style="font-weight: 800; padding:0 0 0 5px; margin:15px 0 0 0; font-size:16px; ">2. Gastos de tránsito y gastos
+	<p style="font-weight: 800; padding:0 0 0 5px; margin:10px 0 0 0; font-size:16px; ">2. Gastos de tránsito y gastos
 		terminales</p>
 	<table style="border: 1px solid #000; width:100%; border-collapse: collapse;">
 		<tr>
@@ -346,7 +343,7 @@
 		</tr>
 	</table>
 	{# 3. Envíos identifi cados #}
-	<p style="font-weight: 800; padding:0 0 0 5px; margin:15px 0 0 0; font-size:16px; ">3. Envíos identifi cados
+	<p style="font-weight: 800; padding:0 0 0 5px; margin:10px 0 0 0; font-size:16px; ">3. Envíos identifi cados
 		terminales</p>
 	<table style="border: 1px solid #000; width:100%; border-collapse: collapse;">
 		<tr>
@@ -443,7 +440,7 @@
 		</tr>
 	</table>
 	{# 4. CCRI e información diversa #}
-	<p style="font-weight: 800; padding:0 0 0 5px; margin:15px 0 0 0; font-size:16px; ">4. CCRI e información diversa
+	<p style="font-weight: 800; padding:0 0 0 5px; margin:10px 0 0 0; font-size:16px; ">4. CCRI e información diversa
 	</p>
 	<table style="border: 1px solid #000; width:100%; border-collapse: collapse;">
 		<tr>
@@ -490,7 +487,7 @@
 		</tr>
 	</table>
 	{# 5. Envases cerrados en tránsito incluidos #}
-	<p style="font-weight: 800; padding:0 0 0 5px; margin:15px 0 0 0; font-size:16px; ">5. Envases cerrados en tránsito
+	<p style="font-weight: 800; padding:0 0 0 5px; margin:10px 0 0 0; font-size:16px; ">5. Envases cerrados en tránsito
 		incluidos
 	</p>
 	<table style="border: 1px solid #000; width:100%; border-collapse: collapse;">
