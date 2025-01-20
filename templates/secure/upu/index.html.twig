@@ -338,6 +338,9 @@
                             Id
                         </th>
                         <th>
+                            Fecha creación
+                        </th>
+                        <th>
                             Producto
                         </th>
                         <th>
@@ -366,6 +369,9 @@
                     <tr>
                         <td>
                             {{s10.id}}
+                        </td>
+                        <td>
+                            {{s10.createdAt|date('d-m-Y')}}
                         </td>
                         <td>
                             {{s10.postalServiceRange.postalService.postalProduct.name}}

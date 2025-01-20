@@ -39,13 +39,11 @@ class RoutesController extends AbstractController
         //BORRAR HASTA ACA.
 
         if ($data['form']->isSubmitted() && $data['form']->isValid()) {
-
-            $originOffice = $officesRepository->findOneBy(['impcCode' => $request->get('abm_routes')['originOffice']]);
-            $destinationOffice = $officesRepository->findOneBy(['impcCode' => $request->get('abm_routes')['destinationOffice']]);
+            $originOffice = $officesRepository->find($request->get('abm_routes')['originOffice']);
+            $destinationOffice = $officesRepository->find($request->get('abm_routes')['destinationOffice']);
             $postalServiceRange = $postalServiceRangeRepository->find($request->get('abm_routes')['serviceRange']);
 
             $data['routes'] = $routesRepository->findByCriteria($originOffice, $destinationOffice, $postalServiceRange);
-            // dd($data['routes'][0]->getSegments()[0]->getFlight());
         }
         return $this->render('secure/routes/abm_routes.html.twig', $data)->setStatusCode(Response::HTTP_OK);
     }
@@ -194,13 +192,18 @@ class RoutesController extends AbstractController
     }
 
     #[Route('/search', name: 'app_secure_search_routes', methods: ['POST'])]
-    public function search(Request $request, RoutesRepository $routesRepository, DispatchRepository $dispatchRepository): Response
+    public function search(Request $request, RoutesRepository $routesRepository, DispatchRepository $dispatchRepository, OfficesRepository $officesRepository,PostalServiceRangeRepository $postalServiceRangeRepository): Response
     {
         $data = json_decode($request->getContent(), true);
 
         $originOffice = $data['originOffice'] ?? null;
         $destinationOffice = $data['destinationOffice'] ?? null;
         $claseSubclase = $data['claseSubclase'] ?? null;
+
+        $originOffice = $officesRepository->find($data['originOffice']);
+        $destinationOffice = $officesRepository->find($data['destinationOffice']);
+        $claseSubclase = $postalServiceRangeRepository->find($data['claseSubclase']);
+
 
         $route = $routesRepository->findByCriteriaDate($originOffice, $destinationOffice, $claseSubclase);
 

@@ -52,7 +52,8 @@ class RoutesRepository extends ServiceEntityRepository
             ->setParameter('destinationOffice', $destinationOffice)
             ->setParameter('postalServiceRange', $postalServiceRange)
             ->setParameter('today', $today->format('Y-m-d'))
-            ->orderBy('r.validUntil','DESC');
+            ->orderBy('r.validUntil','DESC')
+            ->setMaxResults(1); //esto limita el resultado a 1.
 
         return $qb->getQuery()->getOneOrNullResult();
     }
