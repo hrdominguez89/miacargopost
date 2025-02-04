@@ -21,6 +21,17 @@ class DispatchRepository extends ServiceEntityRepository
         parent::__construct($registry, Dispatch::class);
     }
 
+    public function findWithBags(int $id): ?Dispatch
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.bags', 'b') // Hacemos JOIN con la relación
+            ->addSelect('b') // Cargamos los Bags
+            ->where('d.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Dispatch[] Returns an array of Dispatch objects
 //     */

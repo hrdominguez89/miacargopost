@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Formulario Aduana CN33</title>
+
+</head>
+
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+
+	{# Header #}
+	<div>
+				
+		<h1 style="display: inline-block; font-size:18px; padding: 0; margin:0 0 0 335px;">
+			LISTA ESPECIAL</h1>
+		<h1 style="display: inline-block; font-size:18px; padding: 0; margin:0 0 0 305px;">
+			CN 33</h1>
+	</div>
+	<div>
+				
+		<h1 style="display: inline-block; font-size:18px; padding: 0; margin:0 0 25px 335px;">
+			Envíos certificados</h1>
+		
+	</div>
+	
+	<table style="border: 1px solid #000; width:100%; border-collapse: collapse;">
+		<tr>
+			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;" rowspan="2">Operadores
+			</td>
+			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000;">Expedidor</td>
+			<td style="padding-left: 5px; vertical-align:middle; border-right:1px solid #000; font-weight:700;" colspan="5">
+				{{ dispatch.originOffice.impcOrganisationCode }} - {{ dispatch.originOffice.organisationFullName}}
+
+			</td>
+			<td style="padding-left: 5px; vertical-align:top;" rowspan="2">Lista especial n°</td>
+		</tr>
+		<tr>
+			<td
+				style="border-top: 1px solid #000; border-right:1px solid #000; vertical-align:middle; padding-left: 5px;">
+				De destino</td>
+			<td style="border-top: 1px solid #000; font-weight:700;" colspan="5">
+				{{ dispatch.destinationOffice.impcOrganisationCode }} - {{ dispatch.destinationOffice.organisationFullName}}
+			</td>
+		</tr>
+		<tr>
+			<td style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px;"
+				colspan="2">OC de origen y código CTCI</td>
+			<td style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px;">OC
+				de destino y código CTCI</td>
+			<td
+				style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px; padding-right:25px;">
+				Categoria</td>
+			<td
+				style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px; padding-right:15px;">
+				Subclase</td>
+			<td
+				style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px; padding-right:15px;">
+				Año</td>
+			<td style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px; ">
+				Despacho n°</td>
+			<td style="border-top: 1px solid #000; border-right: 1px solid #000; font-size:13px; padding-left:5px;"
+				rowspan="2">Fecha {{ dispatch.createdAt|date('d/m/Y')}} </td>
+		</tr>
+		<tr>
+			<td style="border-top:1px solid #000; border-right:1px solid #000; text-align: center; font-size: 14px;" colspan="2">
+			<strong>	{{ dispatch.originOffice.impcCodeFullName }}<br>
+				{{ dispatch.originOffice.impcCode }}</strong>
+			</td>
+			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000; text-align: center; font-size:14px;">
+			<strong>	{{ dispatch.destinationOffice.impcCodeFullName }}<br>
+				{{ dispatch.destinationOffice.impcCode }}</strong>
+			</td>
+			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000; text-align: center;"> <strong> {{ dispatch.dispatchCode|slice(12, 1) }} </strong> </td>
+			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000; text-align: center;"> <strong> {{ dispatch.dispatchCode|slice(13, 2) }} </strong> </td>
+			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000; text-align: center;"> <strong> {{ dispatch.dispatchCode|slice(15, 1) }} </strong>  </td>
+			<td style="height: 20px; border-top:1px solid #000; border-right:1px solid #000; text-align: center;"> <strong> {{ dispatch.dispatchCode|slice(16, 4) }} </strong> 
+			</td>
+		</tr>
+		<tr>
+			<td style="height:35px; border-top:1px solid #000; border-right:1px solid #000;  font-size:16px; padding-left:5px;"
+				colspan="2">Cantidad total de envios<br>certificados</td>
+			<td style="height:35px; border-top:1px solid #000; border-right:1px solid #000;  font-size:16px; padding-left:5px;"
+				colspan="1"></td>
+				
+				<td colspan="5" style="padding-left: 5px; border-top:1px solid #000; border-right:1px solid #000;  "> <p style="display: inline-block; width: 20px; height:20px; border-top: 1px #000 solid; border-right: 1px #000 solid; padding: 0; margin:0 0 -15px -5px; "> </p> <p style="display: inline-block;  margin:0 0 0px 5px;" >Inscripción global únicamente</p> </td>
+		</tr>
+	</table>
+	
+	
+	<table style="border: 1px solid #000; width:100%; border-collapse: collapse; margin-top:30px; margin-bottom:45px">
+
+		<thead>
+			<tr >
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 5px 0 5px 5px" >N° de<br> orden</th>
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 0 0 0 5px" >Identificador de envío</th>
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 0 0 0 5px" >Origen</th>
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 0 0 0 5px" >Observaciones</th>
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 5px 0 5px 5px" >N° de<br> orden</th>
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 0 0 0 5px" >Identificador de envío</th>
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 0 0 0 5px" >Origen</th>
+				<th style="border-right: 1px solid #000; font-size:13px; text-align:start; padding: 0 0 0 5px" >Observaciones</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{% for i in 1..22 %}
+			
+
+			<tr>
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000"> {{i}} </td>
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000; font-size:12px">
+					{% set bagsCount = bags|length -1 %}
+					{% if ((i - 1) <= bagsCount)  %}
+					{{ bags[i - 1].bagCode }}
+					{# {{ bags[i].bagCode }} #}
+					
+						{% endif %}
+					
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000">
+					{% if ((i - 1) <= bagsCount)  %}
+					{{ bags[i - 1].dispatch.originOffice.impcCode }}
+					{# {{ bags[i].bagCode }} #}
+					
+						{% endif %}
+					
+				</td>
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000"></td>
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000; ">{{ i + 22 }}</td>
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000; font-size:12px">
+					{% if ((i + 22)-1 <= bagsCount)  %}
+					{{ bags[i - 1].bagCode }}
+					{# {{ bags[i].bagCode }} #}
+					
+						{% endif %}</td>
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000">
+					{% if ((i + 22)-1 <= bagsCount)  %}
+					{{ bags[i - 1].dispatch.originOffice.impcCode }}
+					{# {{ bags[i].bagCode }} #}
+					
+						{% endif %}
+				</td>
+				<td style="text-align:center; vertical-align:middle; border: 1px solid #000000"></td>
+			</tr>
+			
+			{% endfor %}
+		</tbody>
+		
+	</table> 
+	
+	
+	{# 6. Firmas #}
+	<table>
+	
+	<tr>
+		<td style="padding:5px 0 0 5px; width:380px">Oficina de cambio expedidora<br>Firma</td>
+		<td style="padding:5px 0 0 5px;">Oficina de cambio de destino<br>Firma</td>
+	</tr>
+	<tr>
+		<td style="padding-left:5px; height:90px;"><div style="border-bottom: 1px solid #000; width:260px;"></div></td>
+		<td style="padding-left:5px;"><div style="border-bottom: 1px solid #000; width:260px;"></div></td>
+	</tr>
+</table>
+</body>
+
+</html>

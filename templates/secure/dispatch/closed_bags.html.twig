@@ -70,6 +70,8 @@
 							</h4>
 							<a target="_blank" class="btn btn-primary align-self-start ms-2"
                				 href="{{ path('app_pdf_cn31', {'dispatch_id':dispatch.id}) }}">Ver CN31</a>
+								<a target="_blank" href="{{ path('app_pdf_cn33', {'dispatch_id':dispatch.id}) }}"
+								class="btn btn-primary ms-2">Ver CN33</a>
 								{# {{ path('app_pdf_cn31', {''}) }} #}
 						</div>
 						<div class="card-body py-0">
@@ -186,7 +188,10 @@
 													<td {{ bag.status.id == 1? 'id="pesoActualEnvaseDespacho"':''}} >{{ bag.weight|number_format(3, ',', '.') }} Kg</td>
 
 													<td class="d-flex align-items-center justify-content-center"><a target="_blank" href="{{ path('app_pdf_cn35', { 'bag_id':bag.id}) }}"
-														class="btn btn-primary">Ver CN35</a></td>
+														class="btn btn-primary">Ver CN35</a>
+														
+													</td>
+													
 												</tr>
 											{% endfor %}
 										</tbody>
