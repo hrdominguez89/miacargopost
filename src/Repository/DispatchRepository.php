@@ -21,6 +21,22 @@ class DispatchRepository extends ServiceEntityRepository
         parent::__construct($registry, Dispatch::class);
     }
 
+    public function findWithRelations(int $dispatchId): ?Dispatch
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.bags', 'b')
+            ->addSelect('b')
+            ->leftJoin('b.s10Codes', 's10')
+            ->addSelect('s10')
+            ->leftJoin('s10.itemDetails', 'i')
+            ->addSelect('i')
+            ->where('d.id = :dispatchId')
+            ->setParameter('dispatchId', $dispatchId)
+            ->orderBy('b.numberBag', 'ASC') // Ordenar por número de envase de menor a mayor
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findWithBags(int $id): ?Dispatch
     {
         return $this->createQueryBuilder('d')
@@ -32,28 +48,28 @@ class DispatchRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-//    /**
-//     * @return Dispatch[] Returns an array of Dispatch objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Dispatch[] Returns an array of Dispatch objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('d')
+    //            ->andWhere('d.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('d.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?Dispatch
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?Dispatch
+    //    {
+    //        return $this->createQueryBuilder('d')
+    //            ->andWhere('d.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
